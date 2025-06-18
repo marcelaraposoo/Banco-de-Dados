@@ -12,29 +12,29 @@ CREATE TABLE Pessoa (
     num_endereço VARCHAR2(4) NOT NULL,
     complemento VARCHAR2(30),
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
-    CONSTRAINT cep_fkey FOREIGN KEY (cep) REFERENCES Endereço(cep),
+    CONSTRAINT cep_fkey FOREIGN KEY (cep) REFERENCES Endereço(cep)
 );
 
-CREATE TABLE Endereço(---ACHO QUE TEM ERRO COM OS CEP SENDO PRIMARY KEY
+CREATE TABLE Endereco(---ACHO QUE TEM ERRO COM OS CEP SENDO PRIMARY KEY
     cep VARCHAR2(8) NOT NULL,
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
     cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep),
+    CONSTRAINT endereco_pkey PRIMARY KEY(cep)
 );
 
 CREATE TABLE Telefone(
     cpf_t VARCHAR2(12) NOT NULL,
     telefone VARCHAR2(11) NOT NULL,
     CONSTRAINT telefone_pkey PRIMARY KEY (telefone, cpf_t),
-    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_p) REFERENCES Pessoa(cpf),
+    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_p) REFERENCES Pessoa(cpf)
 );
 
 CREATE TABLE Email(
     cpf_e VARCHAR2(12) NOT NULL,
     email VARCHAR2(30) NOT NULL,
     CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
-    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf),
+    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf)
 );
 
 CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira 
@@ -50,7 +50,6 @@ CREATE TABLE Dependete(
     nome VARCHAR2(10) NOT NULL,
     CONSTRAINT dependente_pkey  PRIMARY KEY(cpf_responsavel, num_seq),
     CONSTRAINT dependente_fkey FOREIGN KEY (cpf_responsavel) REFERENCES Cliente(cpf_c)
-
 );
 --FUNCIONARIO
 
@@ -62,4 +61,44 @@ CREATE TABLE Funcionario(
     cpf_f VARCHAR2(12) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
     CONSTRAINT funcionario
+);
+
+CREATE TABLE Cargo(
+    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Gerente')) NOT NULL,
+    salario INTEGER NOT NULL,
+    CONSTRAINT Cargo_pkey PRIMARY KEY (titulo)
+);
+
+/*
+CREATE TABLE Gerente(
+    cpf_g VARCHAR2(12) NOT NULL,
+    data_promocao DATE NOT NULL,
+    num_subordinados INTEGER,
+    CONSTRAINT Gerente_pkey PRIMARY KEY (cpf_g),
+    CONSTRAINT Gerente_fkey FOREIGN KEY (cpf_g) REFERENCES Funcionario(cpf_f)
+);
+*/
+
+CREATE TABLE Produto(
+    id INTEGER,
+    titulo VARCHAR2(100),
+    tamanho VARCHAR2(8),
+    lancamento DATE,
+    estoque INTEGER,
+    qnt_alugada INTEGER,
+    CONSTRAINT Produto PRIMARY KEY (id)
+);
+
+CREATE TABLE Genero_produto(
+    id_produto INTEGER, 
+    genero VARCHAR2(25),
+    CONSTRAINT Gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
+    CONSTRAINT Genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+);
+
+CREATE TABLE Produtora_produto(
+    id_produto INTEGER,
+    produtora VARCHAR2(100),
+    CONSTRAINT Produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
+    CONSTRAINT Produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
