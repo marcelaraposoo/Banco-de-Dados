@@ -1,8 +1,5 @@
----TABELAS
---Pessoa (cpf​, gênero, nascimento, nome, cep∗, num_endereço, complemento)
---	cep referência Endereço(cep)
 
-
+--PESSOA
 CREATE TABLE Pessoa (
 	cpf VARCHAR2(12) NOT NULL,
 	nome VARCHAR2(25) NOT NULL,
@@ -38,6 +35,7 @@ CREATE TABLE Email(
     CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf)
 );
 
+--CLIENTES
 CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira 
     cpf_c VARCHAR2(12) NOT NULL,
     cpf_indicador VARCHAR2(12),
@@ -52,8 +50,9 @@ CREATE TABLE Dependete(
     CONSTRAINT dependente_pkey  PRIMARY KEY(cpf_responsavel, num_seq),
     CONSTRAINT dependente_fkey FOREIGN KEY (cpf_responsavel) REFERENCES Cliente(cpf_c)
 );
---FUNCIONARIO
 
+
+--FUNCIONÁRIO
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
 
 CREATE TABLE Funcionario(
@@ -116,6 +115,8 @@ CREATE TABLE Bonus(
 );
 
 
+
+--CONTA
 CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
 
 CREATE TABLE Conta(
