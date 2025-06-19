@@ -1,4 +1,5 @@
 
+
 --PESSOA
 CREATE TABLE Pessoa (
 	cpf VARCHAR2(12) NOT NULL,
@@ -11,7 +12,7 @@ CREATE TABLE Pessoa (
     CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereço) REFERENCES Endereço(cep, num_endereço)
 );
 
-CREATE TABLE Endereco(---ACHO QUE TEM ERRO COM OS CEP SENDO PRIMARY KEY
+CREATE TABLE Endereco(
     cep VARCHAR2(8) NOT NULL,
     num_endereço VARCHAR2(4) NOT NULL,
     complemento VARCHAR2(30),
@@ -72,10 +73,10 @@ CREATE TABLE Cargo(
     CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
---PRODUTO
-CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
+-- PRODUTO
+CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Produto(
-    id_produto INTEGER,
+    id INTEGER,
     titulo VARCHAR2(100),
     tamanho VARCHAR2(8),
     lancamento DATE,
@@ -95,23 +96,22 @@ CREATE TABLE Produtora_produto(
     id_produto INTEGER,
     produtora VARCHAR2(100),
     CONSTRAINT produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
-    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
+    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
-CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
 CREATE TABLE Criadores_produto(
-    id_produto INTEGER,
+    id INTEGER,
     criadores VARCHAR2(100),
     CONSTRAINT criadores_produto_pkey PRIMARY KEY (id_produto, criadores),
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 
-CREATE SEQUENCE id_bonus INCREMENT BY 1 START WITH 0;
+CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Bonus(
-    id_bonus INTEGER,
+    id INTEGER,
     valor NUMBER  NOT NULL,
-    CONSTRAINT bonus_pkey PRIMARY KEY BY 1 START WITH 0
+    CONSTRAINT bonus_pkey PRIMARY KEY (id)
 );
 
 
@@ -129,8 +129,7 @@ CREATE TABLE Conta(
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
 );
 
-
-CREATE TABLE Ganha(  -- dhihisuhf   
+CREATE TABLE Ganha(   
     cpf_c VARCHAR2(12) NOT NULL,     
     num_conta VARCHAR2(12) NOT NULL,     
     id_bonus INTEGER,     
