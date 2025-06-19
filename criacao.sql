@@ -39,7 +39,7 @@ CREATE TABLE Email(
 --CLIENTES
 CREATE TABLE Cliente( 
     cpf_c VARCHAR2(12) NOT NULL,
-    cpf_indicador VARCHAR2(12),
+    cpf_indicador VARCHAR2(12) NOT NULL,
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
     CONSTRAINT cliente_fkey FOREIGN KEY(cpf_c, cpf_indicador) REFERENCES Cliente(cpf_c)
 );
@@ -82,7 +82,7 @@ CREATE TABLE Produto(
     lancamento DATE,
     estoque INTEGER NOT NULL,
     qnt_alugada INTEGER,
-    CONSTRAINT produto_pkey PRIMARY KEY (id),
+    CONSTRAINT produto_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE Genero_produto(
@@ -109,7 +109,7 @@ CREATE TABLE Criadores_produto(
 
 CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Bonus(
-    id INTEGER,
+    id INTEGER NOT NULL,
     valor NUMBER  NOT NULL,
     CONSTRAINT bonus_pkey PRIMARY KEY (id)
 );
@@ -129,10 +129,10 @@ CREATE TABLE Conta(
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
 );
 
-CREATE TABLE Ganha(   
+CREATE TABLE Ganha(    
     cpf_c VARCHAR2(12) NOT NULL,     
     num_conta VARCHAR2(12) NOT NULL,     
-    id_bonus INTEGER,     
+    id_bonus INTEGER NOT NULL,     
     CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
     CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
