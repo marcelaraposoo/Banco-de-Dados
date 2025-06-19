@@ -5,7 +5,7 @@ CREATE TABLE Pessoa (
 	nome VARCHAR2(25) NOT NULL,
     genero VARCHAR2(10) NOT NULL, 
 	nascimento DATE NOT NULL,
-    cep VARCHAR2(8) not null,
+    cep VARCHAR2(8) NOT NULL,
     num_endereço VARCHAR2(4) NOT NULL,
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
     CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereço) REFERENCES Endereço(cep, num_endereço)
@@ -72,7 +72,7 @@ CREATE TABLE Cargo(
     CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
--- PRODUTO
+--PRODUTO
 CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
 CREATE TABLE Produto(
     id_produto INTEGER,
@@ -127,4 +127,15 @@ CREATE TABLE Conta(
     qnt_alugada INTEGER,
     CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc)
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
+);
+
+
+CREATE TABLE Ganha(  -- dhihisuhf   
+    cpf_c VARCHAR2(12) NOT NULL,     
+    num_conta VARCHAR2(12) NOT NULL,     
+    id_bonus INTEGER,     
+    CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
+    CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
+    CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
