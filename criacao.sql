@@ -47,18 +47,17 @@ CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira
 
 CREATE TABLE Dependete(
     cpf_responsavel VARCHAR2(12) NOT NULL,
-    num_seq VARCHAR2(5) NOT NULL,
+    num_seq INTEGER NOT NULL,
     nome VARCHAR2(10) NOT NULL,
     CONSTRAINT dependente_pkey  PRIMARY KEY(cpf_responsavel, num_seq),
     CONSTRAINT dependente_fkey FOREIGN KEY (cpf_responsavel) REFERENCES Cliente(cpf_c)
 );
 --FUNCIONARIO
 
--- PROMOÇÃO
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
 
 CREATE TABLE Funcionario(
-    num_alugueis INTEGER NOT NULL,
+    num_alugueis INTEGER,
     cpf_f VARCHAR2(12) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
     cpf_s VARCHAR2(12) NOT NULL,
@@ -73,16 +72,6 @@ CREATE TABLE Cargo(
     salario INTEGER NOT NULL,
     CONSTRAINT Cargo_pkey PRIMARY KEY (titulo)
 );
-
-/*
-CREATE TABLE Gerente(
-    cpf_g VARCHAR2(12) NOT NULL,
-    data_promocao DATE NOT NULL,
-    num_subordinados INTEGER,
-    CONSTRAINT Gerente_pkey PRIMARY KEY (cpf_g),
-    CONSTRAINT Gerente_fkey FOREIGN KEY (cpf_g) REFERENCES Funcionario(cpf_f)
-);
-*/
 
 CREATE TABLE Produto(
     id INTEGER,
@@ -106,4 +95,17 @@ CREATE TABLE Produtora_produto(
     produtora VARCHAR2(100),
     CONSTRAINT Produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
     CONSTRAINT Produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+)
+
+
+CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
+
+CREATE TABLE Conta(
+    num INTEGER NOT NULL,
+    cpf_cc VARCHAR2(12) NOT NULL,
+    ---criacao DATE NOT NULL,
+    credito NUMBER,
+    qnt_alugada INTEGER,
+    CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc)
+    CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
 );
