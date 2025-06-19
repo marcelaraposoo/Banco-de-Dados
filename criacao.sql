@@ -26,22 +26,22 @@ CREATE TABLE Telefone(
     cpf_t VARCHAR2(12) NOT NULL,
     telefone VARCHAR2(11) NOT NULL,
     CONSTRAINT telefone_pkey PRIMARY KEY (telefone, cpf_t),
-    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_p) REFERENCES Pessoa(cpf)
+    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_t) REFERENCES Pessoa(cpf),
 );
 
 CREATE TABLE Email(
     cpf_e VARCHAR2(12) NOT NULL,
     email VARCHAR2(30) NOT NULL,
     CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
-    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf)
+    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf),
 );
 
 --CLIENTES
-CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira 
+CREATE TABLE Cliente( 
     cpf_c VARCHAR2(12) NOT NULL,
     cpf_indicador VARCHAR2(12),
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
-    CONSTRAINT cliente_fkey FOREIGN KEY(cpf_c, cpf_indicador) REFERENCES Pessoa(cpf)
+    CONSTRAINT cliente_fkey FOREIGN KEY(cpf_c, cpf_indicador) REFERENCES Cliente(cpf_c)
 );
 
 CREATE TABLE Dependete(
@@ -64,43 +64,43 @@ CREATE TABLE Funcionario(
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
     CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f),
-    CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo)
+    CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo),
 );
 
 CREATE TABLE Cargo(
-    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Gerente')) NOT NULL,
+    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
     salario INTEGER NOT NULL,
-    CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
+    CONSTRAINT cargo_pkey PRIMARY KEY (titulo),
 );
 
 -- PRODUTO
 CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Produto(
-    id INTEGER,
-    titulo VARCHAR2(100),
+    id INTEGER NOT NULL,
+    titulo VARCHAR2(100) NOT NULL,
     tamanho VARCHAR2(8),
     lancamento DATE,
-    estoque INTEGER,
+    estoque INTEGER NOT NULL,
     qnt_alugada INTEGER,
-    CONSTRAINT produto_pkey PRIMARY KEY (id)
+    CONSTRAINT produto_pkey PRIMARY KEY (id),
 );
 
 CREATE TABLE Genero_produto(
-    id_produto INTEGER, 
-    genero VARCHAR2(25),
+    id_produto INTEGER NOT NULL, 
+    genero VARCHAR2(25) NOT NULL,
     CONSTRAINT gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
-    CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+    CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id),
 );
 
 CREATE TABLE Produtora_produto(
-    id_produto INTEGER,
-    produtora VARCHAR2(100),
+    id_produto INTEGER NOT NULL,
+    produtora VARCHAR2(100) NOT NULL,
     CONSTRAINT produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
-    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id),
 );
 
 CREATE TABLE Criadores_produto(
-    id INTEGER,
+    id INTEGER NOT NULL,
     criadores VARCHAR2(100),
     CONSTRAINT criadores_produto_pkey PRIMARY KEY (id_produto, criadores),
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
