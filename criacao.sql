@@ -10,17 +10,18 @@ CREATE TABLE Pessoa (
 	nascimento DATE NOT NULL,
     cep VARCHAR2(8) not null,
     num_endereço VARCHAR2(4) NOT NULL,
-    complemento VARCHAR2(30),
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
-    CONSTRAINT cep_fkey FOREIGN KEY (cep) REFERENCES Endereço(cep)
+    CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereço) REFERENCES Endereço(cep, num_endereço)
 );
 
 CREATE TABLE Endereco(---ACHO QUE TEM ERRO COM OS CEP SENDO PRIMARY KEY
     cep VARCHAR2(8) NOT NULL,
+    num_endereço VARCHAR2(4) NOT NULL,
+    complemento VARCHAR2(30),
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
     cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep)
+    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereço),
 );
 
 CREATE TABLE Telefone(
@@ -60,7 +61,11 @@ CREATE TABLE Funcionario(
     num_alugueis INTEGER NOT NULL,
     cpf_f VARCHAR2(12) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
-    CONSTRAINT funcionario
+    cpf_s VARCHAR2(12) NOT NULL,
+    CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
+    CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
+    CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f)
+
 );
 
 CREATE TABLE Cargo(
