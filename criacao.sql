@@ -63,39 +63,57 @@ CREATE TABLE Funcionario(
     cpf_s VARCHAR2(12) NOT NULL,
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
-    CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f)
-
+    CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f),
+    CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo)
 );
 
 CREATE TABLE Cargo(
     titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Gerente')) NOT NULL,
     salario INTEGER NOT NULL,
-    CONSTRAINT Cargo_pkey PRIMARY KEY (titulo)
+    CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
+-- PRODUTO
+CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
 CREATE TABLE Produto(
-    id INTEGER,
+    id_produto INTEGER,
     titulo VARCHAR2(100),
     tamanho VARCHAR2(8),
     lancamento DATE,
     estoque INTEGER,
     qnt_alugada INTEGER,
-    CONSTRAINT Produto PRIMARY KEY (id)
+    CONSTRAINT produto_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE Genero_produto(
     id_produto INTEGER, 
     genero VARCHAR2(25),
-    CONSTRAINT Gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
-    CONSTRAINT Genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+    CONSTRAINT gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
+    CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 CREATE TABLE Produtora_produto(
     id_produto INTEGER,
     produtora VARCHAR2(100),
-    CONSTRAINT Produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
-    CONSTRAINT Produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
-)
+    CONSTRAINT produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
+    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
+);
+
+CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
+CREATE TABLE Criadores_produto(
+    id_produto INTEGER,
+    criadores VARCHAR2(100),
+    CONSTRAINT criadores_produto_pkey PRIMARY KEY (id_produto, criadores),
+    CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
+);
+
+
+CREATE SEQUENCE id_bonus INCREMENT BY 1 START WITH 0;
+CREATE TABLE Bonus(
+    id_bonus INTEGER,
+    valor NUMBER  NOT NULL,
+    CONSTRAINT bonus_pkey PRIMARY KEY BY 1 START WITH 0
+);
 
 
 CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
