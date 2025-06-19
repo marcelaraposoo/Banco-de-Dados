@@ -38,7 +38,7 @@ CREATE TABLE Email(
 --CLIENTES
 CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira 
     cpf_c VARCHAR2(12) NOT NULL,
-    cpf_indicador VARCHAR2(12),
+    cpf_indicador VARCHAR2(12) NOT NULL,
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
     CONSTRAINT cliente_fkey FOREIGN KEY(cpf_c, cpf_indicador) REFERENCES Pessoa(cpf)
 );
@@ -73,45 +73,44 @@ CREATE TABLE Cargo(
 );
 
 -- PRODUTO
-CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
+CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Produto(
-    id_produto INTEGER,
-    titulo VARCHAR2(100),
+    id INTEGER NOT NULL,
+    titulo VARCHAR2(100) NOT NULL,
     tamanho VARCHAR2(8),
     lancamento DATE,
-    estoque INTEGER,
-    qnt_alugada INTEGER,
+    estoque INTEGER NOT NULL,
+    qnt_alugada INTEGER NOT NULL,
     CONSTRAINT produto_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE Genero_produto(
-    id_produto INTEGER, 
-    genero VARCHAR2(25),
+    id_produto INTEGER NOT NULL, 
+    genero VARCHAR2(25) NOT NULL,
     CONSTRAINT gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
     CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 CREATE TABLE Produtora_produto(
-    id_produto INTEGER,
-    produtora VARCHAR2(100),
+    id_produto INTEGER NOT NULL,
+    produtora VARCHAR2(100) NOT NULL,
     CONSTRAINT produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
-    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
+    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
-CREATE SEQUENCE id_produto INCREMENT BY 1 START WITH 0;
 CREATE TABLE Criadores_produto(
-    id_produto INTEGER,
+    id INTEGER NOT NULL,
     criadores VARCHAR2(100),
     CONSTRAINT criadores_produto_pkey PRIMARY KEY (id_produto, criadores),
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 
-CREATE SEQUENCE id_bonus INCREMENT BY 1 START WITH 0;
+CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
 CREATE TABLE Bonus(
-    id_bonus INTEGER,
+    id INTEGER NOT NULL,
     valor NUMBER  NOT NULL,
-    CONSTRAINT bonus_pkey PRIMARY KEY BY 1 START WITH 0
+    CONSTRAINT bonus_pkey PRIMARY KEY (id)
 );
 
 
@@ -127,4 +126,14 @@ CREATE TABLE Conta(
     qnt_alugada INTEGER,
     CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc)
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
+);
+
+CREATE TABLE Ganha(    
+    cpf_c VARCHAR2(12) NOT NULL,     
+    num_conta VARCHAR2(12) NOT NULL,     
+    id_bonus INTEGER NOT NULL,     
+    CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
+    CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
+    CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
