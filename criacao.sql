@@ -1,8 +1,5 @@
----TABELAS
---Pessoa (cpf​, gênero, nascimento, nome, cep∗, num_endereço, complemento)
---	cep referência Endereço(cep)
 
-
+--PESSOA
 CREATE TABLE Pessoa (
 	cpf VARCHAR2(12) NOT NULL,
 	nome VARCHAR2(25) NOT NULL,
@@ -38,6 +35,7 @@ CREATE TABLE Email(
     CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf)
 );
 
+--CLIENTES
 CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira 
     cpf_c VARCHAR2(12) NOT NULL,
     cpf_indicador VARCHAR2(12),
@@ -47,18 +45,18 @@ CREATE TABLE Cliente(--saber se pode colocar as duas como chave estrangeira
 
 CREATE TABLE Dependete(
     cpf_responsavel VARCHAR2(12) NOT NULL,
-    num_seq VARCHAR2(5) NOT NULL,
+    num_seq INTEGER NOT NULL,
     nome VARCHAR2(10) NOT NULL,
     CONSTRAINT dependente_pkey  PRIMARY KEY(cpf_responsavel, num_seq),
     CONSTRAINT dependente_fkey FOREIGN KEY (cpf_responsavel) REFERENCES Cliente(cpf_c)
 );
---FUNCIONARIO
 
--- PROMOÇÃO
+
+--FUNCIONÁRIO
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
 
 CREATE TABLE Funcionario(
-    num_alugueis INTEGER NOT NULL,
+    num_alugueis INTEGER,
     cpf_f VARCHAR2(12) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
     cpf_s VARCHAR2(12) NOT NULL,
@@ -114,4 +112,19 @@ CREATE TABLE Bonus(
     id_bonus INTEGER,
     valor NUMBER  NOT NULL,
     CONSTRAINT bonus_pkey PRIMARY KEY BY 1 START WITH 0
+);
+
+
+
+--CONTA
+CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
+
+CREATE TABLE Conta(
+    num INTEGER NOT NULL,
+    cpf_cc VARCHAR2(12) NOT NULL,
+    ---criacao DATE NOT NULL,
+    credito NUMBER,
+    qnt_alugada INTEGER,
+    CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc)
+    CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
 );
