@@ -130,11 +130,9 @@ CREATE TABLE Conta(
 );
 
 CREATE TABLE Ganha(    
-    --cpf_c VARCHAR2(12) NOT NULL,     
     num_conta VARCHAR2(12) NOT NULL,     
     id_bonus INTEGER NOT NULL,     
     CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
-    --CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
