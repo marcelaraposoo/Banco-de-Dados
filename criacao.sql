@@ -33,7 +33,7 @@ CREATE TABLE Email(
     cpf_e VARCHAR2(12) NOT NULL,
     email VARCHAR2(30) NOT NULL,
     CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
-    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Pessoa(cpf),
+    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c),
 );
 
 --CLIENTES
@@ -130,11 +130,11 @@ CREATE TABLE Conta(
 );
 
 CREATE TABLE Ganha(    
-    cpf_c VARCHAR2(12) NOT NULL,     
+    --cpf_c VARCHAR2(12) NOT NULL,     
     num_conta VARCHAR2(12) NOT NULL,     
     id_bonus INTEGER NOT NULL,     
     CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
-    CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
+    --CONSTRAINT ganha_fkey FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
