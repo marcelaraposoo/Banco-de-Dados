@@ -6,7 +6,7 @@ CREATE TABLE Endereco(
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
     cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco),
+    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco)
 );
 
 --PESSOA
@@ -18,7 +18,7 @@ CREATE TABLE Pessoa (
     cep VARCHAR2(9) NOT NULL,
     num_endereco INT NOT NULL, -- número inteiro no formato 'NNNN', ao invez de VARCHAR2 'N.NNN'
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
-    CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereco) REFERENCES Endereço(cep, num_endereco)
+    CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereco) REFERENCES Endereco(cep, num_endereco)
 );
 
 
@@ -27,14 +27,14 @@ CREATE TABLE Telefone(
     cpf_t VARCHAR2(14) NOT NULL,
     telefone VARCHAR2(11) NOT NULL,
     CONSTRAINT telefone_pkey PRIMARY KEY (telefone, cpf_t),
-    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_t) REFERENCES Pessoa(cpf),
+    CONSTRAINT telefone_fkey FOREIGN KEY (cpf_t) REFERENCES Pessoa(cpf)
 );
 
 CREATE TABLE Email(
     cpf_e VARCHAR2(14) NOT NULL,
     email VARCHAR2(30) NOT NULL,
     CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
-    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c),
+    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c)
 );
 
 --CLIENTES
@@ -59,7 +59,7 @@ CREATE TABLE Dependente(
 CREATE TABLE Cargo(
     titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
     salario INTEGER NOT NULL,
-    CONSTRAINT cargo_pkey PRIMARY KEY (titulo),
+    CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
@@ -72,7 +72,7 @@ CREATE TABLE Funcionario(
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
     CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f),
-    CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo),
+    CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo)
 );
 
 
@@ -93,14 +93,14 @@ CREATE TABLE Genero_produto(
     id_produto INTEGER NOT NULL, 
     genero VARCHAR2(25) NOT NULL,
     CONSTRAINT gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
-    CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id),
+    CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 CREATE TABLE Produtora_produto(
     id_produto INTEGER NOT NULL,
     produtora VARCHAR2(100) NOT NULL,
     CONSTRAINT produtora_produto_pkey PRIMARY KEY (id_produto, produtora),
-    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id),
+    CONSTRAINT produtora_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 CREATE TABLE Criadores_produto(
@@ -128,7 +128,7 @@ CREATE TABLE Conta(
     credito NUMBER,
     qnt_alugada INTEGER,
     CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc),
-    CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c),
+    CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c)
 );
 
 CREATE TABLE Ganha(    
