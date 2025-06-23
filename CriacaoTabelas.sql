@@ -1,4 +1,13 @@
 
+CREATE TABLE Endereco(
+    cep VARCHAR2(9) NOT NULL,
+    num_endereco VARCHAR2(5) NOT NULL,
+    complemento VARCHAR2(30),
+    rua VARCHAR2(40) NOT NULL,
+    bairro VARCHAR2(15)NOT NULL,
+    cidade VARCHAR2(15)NOT NULL,
+    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco),
+);
 
 --PESSOA
 CREATE TABLE Pessoa (
@@ -12,15 +21,7 @@ CREATE TABLE Pessoa (
     CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereco) REFERENCES Endereço(cep, num_endereco)
 );
 
-CREATE TABLE Endereco(
-    cep VARCHAR2(9) NOT NULL,
-    num_endereco VARCHAR2(5) NOT NULL,
-    complemento VARCHAR2(30),
-    rua VARCHAR2(40) NOT NULL,
-    bairro VARCHAR2(15)NOT NULL,
-    cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco),
-);
+
 
 CREATE TABLE Telefone(
     cpf_t VARCHAR2(14) NOT NULL,
@@ -55,6 +56,12 @@ CREATE TABLE Dependente(
 );
 
 --FUNCIONÁRIO
+CREATE TABLE Cargo(
+    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
+    salario INTEGER NOT NULL,
+    CONSTRAINT cargo_pkey PRIMARY KEY (titulo),
+);
+
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
 
 CREATE TABLE Funcionario(
@@ -68,11 +75,6 @@ CREATE TABLE Funcionario(
     CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo),
 );
 
-CREATE TABLE Cargo(
-    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
-    salario INTEGER NOT NULL,
-    CONSTRAINT cargo_pkey PRIMARY KEY (titulo),
-);
 
 -- PRODUTO
 CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
