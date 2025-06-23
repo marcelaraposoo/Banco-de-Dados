@@ -1,7 +1,7 @@
 
 CREATE TABLE Endereco(
     cep VARCHAR2(9) NOT NULL,
-    num_endereco VARCHAR2(5) NOT NULL,
+    num_endereco INT NOT NULL,
     complemento VARCHAR2(30),
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
