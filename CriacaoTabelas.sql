@@ -46,7 +46,7 @@ CREATE TABLE Cliente(
     
 );
 
-CREATE TABLE Dependete(
+CREATE TABLE Dependente(
     cpf_responsavel VARCHAR2(14) NOT NULL,
     num_seq INTEGER NOT NULL,
     nome VARCHAR2(50) NOT NULL,
@@ -136,3 +136,38 @@ CREATE TABLE Ganha(
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
+
+CREATE TABLE Avalia(
+    cpf_c VARCHAR2(14) NOT NULL,
+    id    INTEGER      NOT NULL,
+    valor NUMBER(3,1)  NOT NULL CHECK (valor >= 0 AND valor <= 10),
+    CONSTRAINT avalia_pkey PRIMARY KEY (cpf_c, id),
+    CONSTRAINT avalia_fkey_cliente FOREIGN KEY (cpf_c) REFERENCES Cliente(cpf_c),
+    CONSTRAINT avalia_fkey_produto FOREIGN KEY (id) REFERENCES Produto(id)
+);
+
+CREATE TABLE Avalia2 (
+    cpf_responsavel VARCHAR2(14) NOT NULL,
+    num_seq         INTEGER      NOT NULL,
+    id              INTEGER      NOT NULL,
+    valor           NUMBER(3,1)  NOT NULL CHECK (valor >= 0 AND valor <= 10),
+    CONSTRAINT avalia2_pkey PRIMARY KEY (cpf_responsavel, num_seq, id),
+    CONSTRAINT avalia2_fkey_dependente FOREIGN KEY (cpf_responsavel, num_seq) REFERENCES Dependente(cpf_responsavel, num_seq),
+    CONSTRAINT avalia2_fkey_produto FOREIGN KEY (id) REFERENCES Produto(id)
+);
+
+CREATE TABLE Aluga (
+    cpf_f           VARCHAR2(14)  NOT NULL,
+    num             INTEGER        NOT NULL,
+    id              INTEGER        NOT NULL,
+    data_inicio     DATE           NOT NULL,
+    multa           NUMBER(8,2),
+    preco           NUMBER(8,2)    NOT NULL,
+    forma_pgmto     VARCHAR2(30)   NOT NULL,
+    prazo_devolucao DATE           NOT NULL,
+    CONSTRAINT aluga_pkey PRIMARY KEY (cpf_f, num, id),
+    CONSTRAINT aluga_fkey_funcionario FOREIGN KEY (cpf_f) REFERENCES Funcionario(cpf_f),
+    CONSTRAINT aluga_fkey_conta FOREIGN KEY (num) REFERENCES Conta(num),
+    CONSTRAINT aluga_fkey_produto FOREIGN KEY (id) REFERENCES Produto(id)
+);
+
