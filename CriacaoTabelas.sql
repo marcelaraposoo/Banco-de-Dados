@@ -30,12 +30,6 @@ CREATE TABLE Telefone(
     CONSTRAINT telefone_fkey FOREIGN KEY (cpf_t) REFERENCES Pessoa(cpf)
 );
 
-CREATE TABLE Email(
-    cpf_e VARCHAR2(14) NOT NULL,
-    email VARCHAR2(30) NOT NULL,
-    CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
-    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c)
-);
 
 --CLIENTES
 CREATE TABLE Cliente( 
@@ -45,6 +39,12 @@ CREATE TABLE Cliente(
     CONSTRAINT cliente_fkey_p FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf), -- cpf_c não estava referenciando Pessoa
     CONSTRAINT cliente_fkey_c FOREIGN KEY (cpf_indicador) REFERENCES Cliente(cpf_c)
     
+CREATE TABLE Email(
+    cpf_e VARCHAR2(14) NOT NULL,
+    email VARCHAR2(30) NOT NULL,
+    CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
+    CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c)
+);
 );
 
 CREATE TABLE Dependente(
@@ -104,7 +104,7 @@ CREATE TABLE Produtora_produto(
 );
 
 CREATE TABLE Criadores_produto(
-    id INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
     criadores VARCHAR2(100),
     CONSTRAINT criadores_produto_pkey PRIMARY KEY (id_produto, criadores),
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
@@ -134,7 +134,7 @@ CREATE TABLE Conta(
 CREATE TABLE Ganha(    
     num_conta VARCHAR2(12) NOT NULL,     
     id_bonus INTEGER NOT NULL,     
-    CONSTRAINT ganha_pkey PRIMARY KEY (cpf_c, num_conta, id_bonus),
+    CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
 );
