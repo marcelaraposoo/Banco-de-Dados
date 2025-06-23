@@ -62,10 +62,10 @@ CREATE TABLE Cargo(
     CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
-CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
+CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0 MINVALUE 0;
 
 CREATE TABLE Funcionario(
-    num_alugueis INTEGER NOT NULL,
+    num_aluguels INTEGER DEFAULT 0 NOT NULL,  -- Inicia com 0
     cpf_f VARCHAR2(14) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
     cpf_s VARCHAR2(14),
@@ -135,7 +135,7 @@ CREATE TABLE Ganha(
     num_conta INTEGER NOT NULL,     
     id_bonus INTEGER NOT NULL,     
     CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
-    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num, cpf_cc),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id_bonus)
 );
 
