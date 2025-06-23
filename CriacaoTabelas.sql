@@ -38,13 +38,13 @@ CREATE TABLE Cliente(
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
     CONSTRAINT cliente_fkey_p FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf), -- cpf_c não estava referenciando Pessoa
     CONSTRAINT cliente_fkey_c FOREIGN KEY (cpf_indicador) REFERENCES Cliente(cpf_c)
+);
     
 CREATE TABLE Email(
     cpf_e VARCHAR2(14) NOT NULL,
     email VARCHAR2(30) NOT NULL,
     CONSTRAINT email_pkey PRIMARY KEY (cpf_e, email),
     CONSTRAINT email_fkey FOREIGN KEY (cpf_e) REFERENCES Cliente(cpf_c)
-);
 );
 
 CREATE TABLE Dependente(
