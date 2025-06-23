@@ -7,7 +7,7 @@ CREATE TABLE Pessoa (
     genero CHAR(1) NOT NULL, 
 	nascimento DATE NOT NULL,
     cep VARCHAR2(9) NOT NULL,
-    num_endereço VARCHAR2(5) NOT NULL,
+    num_endereço INT NOT NULL, -- número inteiro no formato 'NNNN', ao invez de VARCHAR2 'N.NNN'
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
     CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereço) REFERENCES Endereço(cep, num_endereço)
 );
@@ -39,9 +39,11 @@ CREATE TABLE Email(
 --CLIENTES
 CREATE TABLE Cliente( 
     cpf_c VARCHAR2(14) NOT NULL,
-    cpf_indicador VARCHAR2(14) NOT NULL,
+    cpf_indicador VARCHAR2(14), -- 'NOT NULL' isso obriga que todo cliente tenha um indicador, isso torna impossível cadastrar o primeiro cliente do sistema, logo deve permitir valores nulos
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
-    CONSTRAINT cliente_fkey FOREIGN KEY(cpf_c, cpf_indicador) REFERENCES Cliente(cpf_c)
+    CONSTRAINT cliente_fkey_p FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf), -- cpf_c não estava referenciando Pessoa
+    CONSTRAINT cliente_fkey_c FOREIGN KEY (cpf_indicador) REFERENCES Cliente(cpf_c)
+    
 );
 
 CREATE TABLE Dependete(
@@ -51,7 +53,6 @@ CREATE TABLE Dependete(
     CONSTRAINT dependente_pkey  PRIMARY KEY(cpf_responsavel, num_seq),
     CONSTRAINT dependente_fkey FOREIGN KEY (cpf_responsavel) REFERENCES Cliente(cpf_c)
 );
-
 
 --FUNCIONÁRIO
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
@@ -75,6 +76,7 @@ CREATE TABLE Cargo(
 
 -- PRODUTO
 CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
+
 CREATE TABLE Produto(
     id INTEGER NOT NULL,
     titulo VARCHAR2(100) NOT NULL,
@@ -106,15 +108,13 @@ CREATE TABLE Criadores_produto(
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
-
 CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
+
 CREATE TABLE Bonus(
     id INTEGER NOT NULL,
     valor NUMBER  NOT NULL,
     CONSTRAINT bonus_pkey PRIMARY KEY (id)
 );
-
-
 
 --CONTA
 CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
