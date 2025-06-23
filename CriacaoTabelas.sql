@@ -65,10 +65,10 @@ CREATE TABLE Cargo(
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0;
 
 CREATE TABLE Funcionario(
-    num_alugueis INTEGER,
+    num_alugueis INTEGER NOT NULL,
     cpf_f VARCHAR2(14) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
-    cpf_s VARCHAR2(14) NOT NULL,
+    cpf_s VARCHAR2(14),
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
     CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f),
@@ -110,12 +110,12 @@ CREATE TABLE Criadores_produto(
     CONSTRAINT criadores_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
-CREATE SEQUENCE id INCREMENT BY 1 START WITH 1;
+CREATE SEQUENCE id_bonus INCREMENT BY 1 START WITH 1;
 
 CREATE TABLE Bonus(
-    id INTEGER NOT NULL,
+    id_bonus INTEGER NOT NULL,
     valor NUMBER  NOT NULL,
-    CONSTRAINT bonus_pkey PRIMARY KEY (id)
+    CONSTRAINT bonus_pkey PRIMARY KEY (id_bonus)
 );
 
 --CONTA
@@ -132,11 +132,11 @@ CREATE TABLE Conta(
 );
 
 CREATE TABLE Ganha(    
-    num_conta VARCHAR2(12) NOT NULL,     
+    num_conta INTEGER NOT NULL,     
     id_bonus INTEGER NOT NULL,     
     CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
     CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
-    CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id)
+    CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id_bonus)
 );
 
 CREATE TABLE Avalia(
