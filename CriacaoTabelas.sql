@@ -7,19 +7,19 @@ CREATE TABLE Pessoa (
     genero CHAR(1) NOT NULL, 
 	nascimento DATE NOT NULL,
     cep VARCHAR2(9) NOT NULL,
-    num_endereço INT NOT NULL, -- número inteiro no formato 'NNNN', ao invez de VARCHAR2 'N.NNN'
+    num_endereco INT NOT NULL, -- número inteiro no formato 'NNNN', ao invez de VARCHAR2 'N.NNN'
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
-    CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereço) REFERENCES Endereço(cep, num_endereço)
+    CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereco) REFERENCES Endereço(cep, num_endereco)
 );
 
 CREATE TABLE Endereco(
     cep VARCHAR2(9) NOT NULL,
-    num_endereço VARCHAR2(5) NOT NULL,
+    num_endereco VARCHAR2(5) NOT NULL,
     complemento VARCHAR2(30),
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
     cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereço),
+    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco),
 );
 
 CREATE TABLE Telefone(
