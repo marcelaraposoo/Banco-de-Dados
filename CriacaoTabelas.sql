@@ -54,7 +54,7 @@ CREATE TABLE Dependente(
 
 --FUNCIONÁRIO
 CREATE TABLE Cargo(
-    titulo VARCHAR2(11) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
+    titulo VARCHAR2(12) CHECK (titulo IN ('Funcionário', 'Supervisor')) NOT NULL,
     salario INTEGER NOT NULL,
     CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
@@ -62,7 +62,7 @@ CREATE TABLE Cargo(
 CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0 MINVALUE 0;
 
 CREATE TABLE Funcionario(
-    num_aluguels INTEGER DEFAULT 0 NOT NULL,  -- Inicia com 0
+    num_alugueis INTEGER DEFAULT 0 NOT NULL,  -- Inicia com 0
     cpf_f VARCHAR2(14) NOT NULL,
     cargo VARCHAR2(13) NOT NULL,
     cpf_s VARCHAR2(14),
