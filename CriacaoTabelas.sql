@@ -6,7 +6,7 @@ CREATE TABLE Endereco(
     rua VARCHAR2(40) NOT NULL,
     bairro VARCHAR2(15)NOT NULL,
     cidade VARCHAR2(15)NOT NULL,
-    CONSTRAINT endereco_pkey PRIMARY KEY(cep,num_endereco)
+    CONSTRAINT endereco_pkey PRIMARY KEY (cep, num_endereco)
 );
 
 --PESSOA
@@ -16,12 +16,10 @@ CREATE TABLE Pessoa (
     genero CHAR(1) NOT NULL, 
 	nascimento DATE NOT NULL,
     cep VARCHAR2(9) NOT NULL,
-    num_endereco INT NOT NULL, -- número inteiro no formato 'NNNN', ao invez de VARCHAR2 'N.NNN'
+    num_endereco INT NOT NULL,
 	CONSTRAINT pessoa_pkey PRIMARY KEY (cpf),
     CONSTRAINT cep_fkey FOREIGN KEY (cep, num_endereco) REFERENCES Endereco(cep, num_endereco)
 );
-
-
 
 CREATE TABLE Telefone(
     cpf_t VARCHAR2(14) NOT NULL,
@@ -30,13 +28,12 @@ CREATE TABLE Telefone(
     CONSTRAINT telefone_fkey FOREIGN KEY (cpf_t) REFERENCES Pessoa(cpf)
 );
 
-
 --CLIENTES
 CREATE TABLE Cliente( 
     cpf_c VARCHAR2(14) NOT NULL,
-    cpf_indicador VARCHAR2(14), -- 'NOT NULL' isso obriga que todo cliente tenha um indicador, isso torna impossível cadastrar o primeiro cliente do sistema, logo deve permitir valores nulos
+    cpf_indicador VARCHAR2(14),
     CONSTRAINT cliente_pkey PRIMARY KEY (cpf_c),
-    CONSTRAINT cliente_fkey_p FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf), -- cpf_c não estava referenciando Pessoa
+    CONSTRAINT cliente_fkey_p FOREIGN KEY (cpf_c) REFERENCES Pessoa(cpf),
     CONSTRAINT cliente_fkey_c FOREIGN KEY (cpf_indicador) REFERENCES Cliente(cpf_c)
 );
     
@@ -114,7 +111,7 @@ CREATE SEQUENCE id_bonus INCREMENT BY 1 START WITH 1;
 
 CREATE TABLE Bonus(
     id_bonus INTEGER NOT NULL,
-    valor NUMBER  NOT NULL,
+    valor NUMBER NOT NULL,
     CONSTRAINT bonus_pkey PRIMARY KEY (id_bonus)
 );
 
@@ -127,7 +124,7 @@ CREATE TABLE Conta(
     ---criacao DATE NOT NULL,
     credito NUMBER,
     qnt_alugada INTEGER,
-    CONSTRAINT conta_pkey PRIMARY KEY (num,cpf_cc),
+    CONSTRAINT conta_pkey PRIMARY KEY (num, cpf_cc),
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c)
 );
 
@@ -136,7 +133,7 @@ CREATE TABLE Ganha(
     id_bonus INTEGER NOT NULL,   
     cpf_g VARCHAR2(14) NOT NULL,
     CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
-    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta,cpf_g) REFERENCES Conta(num, cpf_cc),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta, cpf_g) REFERENCES Conta(num, cpf_cc),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id_bonus)
 );
 
