@@ -71,7 +71,7 @@ CREATE TABLE Funcionario(
     cpf_s VARCHAR2(14),
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
-    CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionário(cpf_f),
+    CONSTRAINT funcionario_fkey2 FOREIGN KEY (cpf_s) REFERENCES Funcionario(cpf_f),
     CONSTRAINT funcionario_fkey3 FOREIGN KEY (cargo) REFERENCES Cargo(titulo)
 );
 
@@ -133,9 +133,10 @@ CREATE TABLE Conta(
 
 CREATE TABLE Ganha(    
     num_conta INTEGER NOT NULL,     
-    id_bonus INTEGER NOT NULL,     
+    id_bonus INTEGER NOT NULL,   
+    cpf_g VARCHAR2(14) NOT NULL,
     CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
-    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num, cpf_cc),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta,cpf_g) REFERENCES Conta(num, cpf_cc),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id_bonus)
 );
 
@@ -169,7 +170,7 @@ CREATE TABLE Aluga (
     prazo_devolucao DATE           NOT NULL,
     CONSTRAINT aluga_pkey PRIMARY KEY (cpf_f, num, id),
     CONSTRAINT aluga_fkey_funcionario FOREIGN KEY (cpf_f) REFERENCES Funcionario(cpf_f),
-    CONSTRAINT aluga_fkey_conta FOREIGN KEY (num) REFERENCES Conta(num),
+    CONSTRAINT aluga_fkey_conta FOREIGN KEY (num) REFERENCES Conta(num, cpf_cc),
     CONSTRAINT aluga_fkey_produto FOREIGN KEY (id) REFERENCES Produto(id)
 );
 
