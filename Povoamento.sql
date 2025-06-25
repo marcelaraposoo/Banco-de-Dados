@@ -48,6 +48,7 @@ INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('6
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('700.000.000-00', 'Bruno Carvalho', 'H', TO_DATE('12/06/1990','DD/MM/YYYY'), '80230-010', 211);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('800.000.000-00', 'Beatriz Pereira', 'M', TO_DATE('08/04/1999','DD/MM/YYYY'), '69037-042', 95);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('900.000.000-00', 'Felipe Ribeiro', 'H', TO_DATE('14/12/2005','DD/MM/YYYY'), '29055-310', 809);
+
 -- Funcionários
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('110.000.000-00', 'Carla Mendes', 'M', TO_DATE('18/05/1988','DD/MM/YYYY'), '51020-000', 500);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('120.000.000-00', 'Fernanda Lima', 'M', TO_DATE('20/09/1992','DD/MM/YYYY'), '11060-001', 152);
@@ -112,18 +113,107 @@ INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (0, '120.000.
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (0, '130.000.000-00', 'Funcionário', '110.000.000-00');
 
 -- Tabela Produto
+DECLARE
+    v_id NUMBER;
+BEGIN
+    -- Produto 1
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'Vingadores: Ultimato', '181', TO_DATE('26/04/2019','DD/MM/YYYY'), 10, 2)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Ação');
+    INSERT INTO Genero_produto VALUES (v_id, 'Ficção');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Marvel Studios');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Anthony Russo');
+
+    -- Produto 2
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'O Rei Leão', '118', TO_DATE('19/07/2019','DD/MM/YYYY'), 5, 1)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Animação');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Disney');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Jon Favreau');
+
+    -- Produto 3
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'Interstellar', '169', TO_DATE('07/11/2014','DD/MM/YYYY'), 8, 3)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Ficção Científica');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Paramount Pictures');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Christopher Nolan');
+
+    -- Produto 4
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'Joker', '122', TO_DATE('04/10/2019','DD/MM/YYYY'), 7, 2)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Drama');
+    INSERT INTO Genero_produto VALUES (v_id, 'Suspense');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Warner Bros.');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Todd Phillips');
+
+    -- Produto 5
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'The Matrix', '136', TO_DATE('31/03/1999','DD/MM/YYYY'), 6, 4)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Ação');
+    INSERT INTO Genero_produto VALUES (v_id, 'Ficção Científica');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Warner Bros.');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Lana Wachowski');
+
+    -- Produto 6
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, '1984', '328', TO_DATE('08/06/1949','DD/MM/YYYY'), 12, 5)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Ficção Científica');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Companhia das Letras');
+    INSERT INTO Criadores_produto VALUES (v_id, 'George Orwell');
+
+    -- Produto 7
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'O Senhor dos Anéis: A Sociedade do Anel', '576', TO_DATE('29/07/1954','DD/MM/YYYY'), 9, 3)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Fantasia');
+    INSERT INTO Produtora_produto VALUES (v_id, 'HarperCollins');
+    INSERT INTO Criadores_produto VALUES (v_id, 'J.R.R. Tolkien');
+
+    -- Produto 8
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'O Hobbit', '336', TO_DATE('21/09/1937','DD/MM/YYYY'), 7, 2)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Fantasia');
+    INSERT INTO Produtora_produto VALUES (v_id, 'HarperCollins');
+    INSERT INTO Criadores_produto VALUES (v_id, 'J.R.R. Tolkien');
+
+    -- Produto 9
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'Dom Quixote', '863', TO_DATE('16/01/1605','DD/MM/YYYY'), 5, 1)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Clássico');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Editora 34');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Miguel de Cervantes');
+
+    -- Produto 10
+    INSERT INTO Produto(id, titulo, tamanho, lancamento, estoque, qnt_alugada)
+    VALUES (id.NEXTVAL, 'A Menina que Roubava Livros', '480', TO_DATE('14/03/2005','DD/MM/YYYY'), 6, 2)
+    RETURNING id INTO v_id;
+    INSERT INTO Genero_produto VALUES (v_id, 'Drama');
+    INSERT INTO Produtora_produto VALUES (v_id, 'Intrínseca');
+    INSERT INTO Criadores_produto VALUES (v_id, 'Markus Zusak');
+END;
+/
+/*
+
 -- Filmes
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (1, 'Vingadores: Ultimato', '181', TO_DATE('26/04/2019','DD/MM/YYYY'), 10, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (2, 'O Rei Leão', '118', TO_DATE('19/07/2019','DD/MM/YYYY'), 5, 1);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (3, 'Interstellar', '169', TO_DATE('07/11/2014','DD/MM/YYYY'), 8, 3);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (4, 'Joker', '122', TO_DATE('04/10/2019','DD/MM/YYYY'), 7, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (5, 'The Matrix', '136', TO_DATE('31/03/1999','DD/MM/YYYY'), 6, 4);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Vingadores: Ultimato', '181', TO_DATE('26/04/2019','DD/MM/YYYY'), 10, 2);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Rei Leão', '118', TO_DATE('19/07/2019','DD/MM/YYYY'), 5, 1);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Interstellar', '169', TO_DATE('07/11/2014','DD/MM/YYYY'), 8, 3);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Joker', '122', TO_DATE('04/10/2019','DD/MM/YYYY'), 7, 2);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'The Matrix', '136', TO_DATE('31/03/1999','DD/MM/YYYY'), 6, 4);
 -- Livros
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (6, '1984', '328', TO_DATE('08/06/1949','DD/MM/YYYY'), 12, 5);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (7, 'O Senhor dos Anéis: A Sociedade do Anel', '576', TO_DATE('29/07/1954','DD/MM/YYYY'), 9, 3);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (8, 'O Hobbit', '336', TO_DATE('21/09/1937','DD/MM/YYYY'), 7, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (9, 'Dom Quixote', '863', TO_DATE('16/01/1605','DD/MM/YYYY'), 5, 1);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (10, 'A Menina que Roubava Livros', '480', TO_DATE('14/03/2005','DD/MM/YYYY'), 6, 2);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, '1984', '328', TO_DATE('08/06/1949','DD/MM/YYYY'), 12, 5);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Senhor dos Anéis: A Sociedade do Anel', '576', TO_DATE('29/07/1954','DD/MM/YYYY'), 9, 3);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Hobbit', '336', TO_DATE('21/09/1937','DD/MM/YYYY'), 7, 2);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Dom Quixote', '863', TO_DATE('16/01/1605','DD/MM/YYYY'), 5, 1);
+INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'A Menina que Roubava Livros', '480', TO_DATE('14/03/2005','DD/MM/YYYY'), 6, 2);
 
 -- Tabela Genero_produto
 INSERT INTO Genero_produto (id_produto, genero) VALUES (1, 'Ação');
@@ -163,21 +253,24 @@ INSERT INTO Criadores_produto (id_produto, criadores) VALUES (7, 'J.R.R. Tolkien
 INSERT INTO Criadores_produto (id_produto, criadores) VALUES (8, 'J.R.R. Tolkien');
 INSERT INTO Criadores_produto (id_produto, criadores) VALUES (9, 'Miguel de Cervantes');
 INSERT INTO Criadores_produto (id_produto, criadores) VALUES (10, 'Markus Zusak');
+*/
+
 
 -- Tabela Bonus
 INSERT INTO Bonus (id_bonus, valor) VALUES (1, 10.00);
 INSERT INTO Bonus (id_bonus, valor) VALUES (2, 20.00);
 
 -- Tabela Conta
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (1, '100.000.000-00', 100.00, 2);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (2, '200.000.000-00', 150.00, 1);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (3, '300.000.000-00', 200.00, 3);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (4, '400.000.000-00', 80.00, 0);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (5, '500.000.000-00', 90.00, 1);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (6, '600.000.000-00', 110.00, 2);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (7, '700.000.000-00', 130.00, 0);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (8, '800.000.000-00', 95.00, 1);
-INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (9, '900.000.000-00', 50.00, 0);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '100.000.000-00', 100.00, 2);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '200.000.000-00', 150.00, 1);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '300.000.000-00', 200.00, 3);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '400.000.000-00', 80.00, 0);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '500.000.000-00', 90.00, 1);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '600.000.000-00', 110.00, 2);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '700.000.000-00', 130.00, 0);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '800.000.000-00', 95.00, 1);
+INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '900.000.000-00', 50.00, 0);
+
 
 -- Tabela Ganha
 INSERT INTO Ganha (num_conta, id_bonus, cpf_g) VALUES (1, 1, '100.000.000-00');
