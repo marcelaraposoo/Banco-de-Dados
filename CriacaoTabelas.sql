@@ -59,12 +59,11 @@ CREATE TABLE Cargo(
     CONSTRAINT cargo_pkey PRIMARY KEY (titulo)
 );
 
-CREATE SEQUENCE num_alugueis INCREMENT BY 1 START WITH 0 MINVALUE 0;
 
 CREATE TABLE Funcionario(
-    num_alugueis INTEGER DEFAULT 0 NOT NULL,  -- Inicia com 0
+    num_alugueis INTEGER NOT NULL,  -- Inicia com 0
     cpf_f VARCHAR2(14) NOT NULL,
-    cargo VARCHAR2(13) NOT NULL,
+    cargo VARCHAR2(12) NOT NULL,
     cpf_s VARCHAR2(14),
     CONSTRAINT funcionario_pkey PRIMARY KEY (cpf_f),
     CONSTRAINT funcionario_fkey FOREIGN KEY (cpf_f) REFERENCES Pessoa(cpf),
@@ -121,19 +120,17 @@ CREATE SEQUENCE num INCREMENT BY 1 START WITH 1;
 CREATE TABLE Conta(
     num INTEGER NOT NULL,
     cpf_cc VARCHAR2(14) NOT NULL,
-    ---criacao DATE NOT NULL,
     credito NUMBER,
     qnt_alugada INTEGER,
-    CONSTRAINT conta_pkey PRIMARY KEY (num, cpf_cc),
+    CONSTRAINT conta_pkey PRIMARY KEY (num),
     CONSTRAINT conta_fkey FOREIGN KEY (cpf_cc) REFERENCES Cliente(cpf_c)
 );
 
 CREATE TABLE Ganha(    
     num_conta INTEGER NOT NULL,     
     id_bonus INTEGER NOT NULL,   
-    cpf_g VARCHAR2(14) NOT NULL,
     CONSTRAINT ganha_pkey PRIMARY KEY (num_conta, id_bonus),
-    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta, cpf_g) REFERENCES Conta(num, cpf_cc),
+    CONSTRAINT ganha_fkey2 FOREIGN KEY (num_conta) REFERENCES Conta(num),
     CONSTRAINT ganha_fkey3 FOREIGN KEY (id_bonus) REFERENCES Bonus(id_bonus)
 );
 
@@ -159,7 +156,6 @@ CREATE TABLE Avalia2 (
 CREATE TABLE Aluga (
     cpf_f           VARCHAR2(14)  NOT NULL,
     num             INTEGER        NOT NULL,
-    cpf_cli         VARCHAR2(14)  NOT NULL,
     id              INTEGER        NOT NULL,
     data_inicio     DATE           NOT NULL,
     multa           NUMBER(8,2),
@@ -168,7 +164,7 @@ CREATE TABLE Aluga (
     prazo_devolucao DATE           NOT NULL,
     CONSTRAINT aluga_pkey PRIMARY KEY (cpf_f, num, id),
     CONSTRAINT aluga_fkey_funcionario FOREIGN KEY (cpf_f) REFERENCES Funcionario(cpf_f),
-    CONSTRAINT aluga_fkey_conta FOREIGN KEY (num, cpf_cli) REFERENCES Conta(num, cpf_cc),
+    CONSTRAINT aluga_fkey_conta FOREIGN KEY (num) REFERENCES Conta(num),
     CONSTRAINT aluga_fkey_produto FOREIGN KEY (id) REFERENCES Produto(id)
 
 );
