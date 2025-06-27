@@ -57,7 +57,7 @@ INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('9
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('110.000.000-00', 'Carla Mendes', 'M', TO_DATE('18/05/1988','DD/MM/YYYY'), '51020-000', 500);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('120.000.000-00', 'Fernanda Lima', 'M', TO_DATE('20/09/1992','DD/MM/YYYY'), '11060-001', 152);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('130.000.000-00', 'Ricardo Almeida', 'H', TO_DATE('05/02/1979','DD/MM/YYYY'), '41820-020', 310);
-INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('140.000.000-00', 'Amanda Oliveira', 'M', TO_DATE('15/03/1990','DD/MM/YYYY'), '52011-230', 87,);
+INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('140.000.000-00', 'Amanda Oliveira', 'M', TO_DATE('15/03/1990','DD/MM/YYYY'), '52011-230', 87);
 INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco) VALUES ('150.000.000-00', 'Patrícia Silva', 'M', TO_DATE('22/07/1985','DD/MM/YYYY'), '52061-000', 142);
 
 -- Tabela Telefone
@@ -286,17 +286,17 @@ INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '900.
 -- Tabela Ganha
 INSERT INTO Ganha (num_conta, id_bonus) VALUES (1, 1);
 INSERT INTO Ganha (num_conta, id_bonus) VALUES (2, 2);
-INSERT INTO Ganha (num_conta, id_bonus) VALUES (3, 1);
+INSERT INTO Ganha (num_conta, id_bonus) VALUES (5, 1);
 
 -- Tabela Avalia
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('100.000.000-00', 1, 9.0);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('100.000.000-00', 6, 8.5);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 2, 8.0);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('100.000.000-00', 1, 8.5);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 1, 8.0);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 7, 9.5);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 3, 9.5);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 8, 7.5);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 3, 7.5);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('400.000.000-00', 4, 8.0);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('500.000.000-00', 5, 9.0);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('500.000.000-00', 4, 9.0);
 
 -- Tabela Avalia2
 INSERT INTO Avalia2 (cpf_responsavel, num_seq, id, valor) VALUES ('100.000.000-00', 1, 2, 8.5);

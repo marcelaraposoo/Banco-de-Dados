@@ -35,7 +35,7 @@ WHERE E.cpf_e IN (SELECT C.cpf_c
 ---------order by num de pecas alugadas dos produtos
 SELECT P.qnt_alugada, P.titulo
 FROM Produto P
-ORDER BY P.qnt_alugada ASC, P.titulo ASC;
+ORDER BY P.qnt_alugada DESC, P.titulo ASC;
 
 ------------TODOS OS CLIENTE  E OS QUAIS GANHARAM BONUS 
 SELECT P.nome, id_bonus
@@ -46,66 +46,22 @@ LEFT JOIN GANHA G ON Conta.num=G.num
 
 
 
+--- avaliacões dos produtos (feita pelos clientes)(tirando a pior das avaliaçoes)
+SELECT P.titulo, AV.valor
+from Avalia  AV
+JOIN Produto P on AV.id=P.id
+WHERE AV.valor > ANY (SELECT AV2.valor
+                    FROM Avalia A2
+                    WHERE A2.id = AV.id
+                )
+
+                
+---group by rodutos havinf  media da avaliacao dos dependente  maior que 7
+ 
 
 
-
----- contar quantos produtos ID tiverem avaliacao maior que 
-SELECT P.titulo
-
----group by rodutos havinf avaliacao maior que 7
+---- listar todas as as avaliacaoes menos a pior
 
 
+--- select com all vai ser o do funcionario qeu mais vendoeu
 
-
-
-
-
-
---------------------
-SELECT PV.NOTA FROM PESSOA P
-JOIN ALUNO A 
-    ON P.MATRICULA_PESSOA==A.MATRICULA_ALUNO
-JOIN PROVA PV 
-    ONWHERE P.NOM="Augustus Kilter" and PV.aluno_semestre='2016.2'
-
-
-
-SELECT P.TITULO, AT.ANO_SEMESTRE,P.CONCEITO
-FROM PESSOA P
-INNER JOIN ALUNO A ON P.MATRICULA=A.MATRICULA_ALUNO
-INNER JOIN ALUNO_TURMA AT ON A.MATRICULA_ALUNO=AT.MATRICULA_ALUNO
-INNER JOIN PROJETO PR ON AT.CODIGO_PROJETO=PR.CODIGO_PROJETO
-WHERE P.NOME='JOAO CUSTODIA'
-ORDER BY AT.ANO_SEMESTRE, PR.CONCEITO
-
-
-SELECT PROF.matriculka_professor, P1.nome , AT. CODIGO_DICIPLINA --P1-PESSOA PROFESSOR
-FROM PESSOA P1
-INNER JOIN MINISTRA M ON P1.matricula_pROFESSOR= M.MATRICULA_MATRICULA_PROFESSOR
-INNER JOIN ALUNO_TURMA AT ON M.CODIGO_DICIPLINA=AT.CODIGO_DICIPLINA
-    AND M.ANO_SEMESTRE=AT.ANO_SEMESTRE
-    AND M.CODIGO_CURSO=AT.CODIGO_CURSO
-INNER JOIN PESSOA P2 ON AT.MATRICULA_ALUNO =P2.MATRICULA_PESSOA
-WHERE P2.NOME='HELENA NUNES' AND AT.ANO_SEMESTRE=(SELECT MIN(AT2.ANO_SEMESTRE)
-                                                FROM ALUNO A
-                                                JOIN ALUNO_TURMA AT2 ON A.MATRICULA_ALUNO=AT2.ALUNO_MATRICULA
-                                                WHERE  A.MATRICULA= P2.MATRICULA_PESSOA)
-
-
-
-SELECT PROJ.TITULO, AT.ANO_SEMESTRE, C.NOME, P.NOME
-FROM PESSOA P 
-INNER JOIN ALUNO_TURMA AT 
-    ON P.MATRICULA_PESSOA=AT.MATRICULA_ALUNO
-LEFT JOIN PROJETO PROJ
-    ON AT.CODIGO_PROJETO=PROJ.CODIGO_PROJETO
-INNER JOIN CURSO C
-    ON AT.CODIGO_CURSO=C.CODIGO_CURSO
-WHERE AT.CODIGO_DICIPLINA='5' 
-
-
-SELECT P1.NOME AS LIDERADO, P2.NOME AS LIDER
-FROM PROFESSOR PR1
-    FULL JOIN PROFESSOR PR2 ON PR1.MATRICULA_LIDER=PR2.matricula_pROFESSOR
-    LEFT JOIN PESSOA P1 ON P1.MATRICULA_PESSOA=PR1.MATRICULA_PROFESSOR
-    LEFT JOIN PESSOA P2 ON P2.MATRICULA_PESSOA=PR2.MATRICULA_PROFESSOR
