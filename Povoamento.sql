@@ -25,19 +25,21 @@ Tabelas:
 
 -- Tabela Endereco
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('55580-000', 101, NULL, 'Av. Brasil', 'Centro', 'Recife');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('20040-004', 45, NULL, 'Rua das Laranjeiras', 'Botafogo', 'Rio de Janeiro');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('01311-200', 3302, 'Apto 102', 'Rua Augusta', 'Consolação', 'São Paulo');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('70160-900', 78, NULL, 'SQS 308', 'Asa Sul', 'Brasília');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('40020-090', 554, NULL, 'Av. Sete de Setembro', 'Centro', 'Salvador');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('30140-072', 120, NULL, 'Rua da Bahia', 'Lourdes', 'Recife');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('80230-010', 211, NULL, 'Rua Itacolomi', 'Cristo Rei', 'Recife');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('69037-042', 95, NULL, 'Av. Torquato Tapajós', 'Flores', 'Manaus');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('29055-310', 809, NULL, 'Rua Alegria', 'Centro', 'Vitória');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('20040-004', 45, NULL, 'Rua das Laranjeiras', 'Santo Amaro', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('01311-200', 3302, 'Apto 102', 'Rua Augusta', 'CDU', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('70160-900', 78, NULL, 'SQS 308', 'Várzea', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('40020-090', 554, NULL, 'Av. Sete de Setembro', 'Centro', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('30140-072', 120, NULL, 'Rua da Bahia', 'Madalena', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('80230-010', 211, NULL, 'Rua Itacolomi', 'Várzea', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('69037-042', 95, NULL, 'Av. Torquato Tapajós', 'CDU', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('29055-310', 809, NULL, 'Rua Alegria', 'Brasilit', 'Recife');
+
+
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('51020-000', 500, NULL, 'Rua Barão de Souza Leão', 'Boa Viagem', 'Recife');
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('11060-001', 152, NULL, 'Av. Ana Costa', 'Gonzaga', 'Santos');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('41820-020', 310, NULL, 'Rua Barão de Itapoan', 'Barra', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('41820-020', 310, NULL, 'Rua Barão de Itapoan', 'CDU', 'Recife');
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade)VALUES ('52011-230', 87, NULL, 'Rua Amélia', 'Graças', 'Recife');
-INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade)VALUES ('52061-000', 142, NULL, 'Rua Casa Forte', 'Casa Forte', 'Recife');
+INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade)VALUES ('52061-000', 142, NULL, 'Rua Casa Forte', 'Várzea', 'Recife');
 
 -- Tabela Pessoa
 -- Clientes
@@ -117,7 +119,7 @@ INSERT INTO Cargo (titulo, salario) VALUES ('Supervisor', 4500);
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (4, '110.000.000-00', 'Supervisor', NULL);
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (5, '120.000.000-00', 'Funcionário', '110.000.000-00');
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (5, '130.000.000-00', 'Funcionário', '110.000.000-00');
-INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (4, '140.000.000-00', 'Funcionário', '110.000.000-00');
+INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (4, '140.000.000-00', 'Supervisor', '110.000.000-00');
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (3, '150.000.000-00', 'Funcionário', '110.000.000-00');
 
 
