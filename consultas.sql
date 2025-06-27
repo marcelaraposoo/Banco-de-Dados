@@ -59,7 +59,7 @@ WHERE AV.valor > ANY (SELECT AV2.valor
 SELECT P.nome, F.num_alugueis
 FROM Pessoa P
 JOIN Funcionario F ON P.cpf=F.cpf_f
-WHERE F.num_alugueis> ALL(SELECT F2.num_alugueis
+WHERE F.num_alugueis>= ALL(SELECT F2.num_alugueis
                         FROM Funcionario F2
                         WHERE F2.cpf_f != F.cpf_f
                         )
