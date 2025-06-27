@@ -290,11 +290,11 @@ INSERT INTO Ganha (num_conta, id_bonus) VALUES (5, 1);
 
 -- Tabela Avalia
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('100.000.000-00', 1, 9.0);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('100.000.000-00', 1, 8.5);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 1, 8.0);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 1, 8.5);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 1, 8.0);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('200.000.000-00', 7, 9.5);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 3, 9.5);
-INSERT INTO Avalia (cpf_c, id, valor) VALUES ('300.000.000-00', 3, 7.5);
+INSERT INTO Avalia (cpf_c, id, valor) VALUES ('500.000.000-00', 3, 7.5);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('400.000.000-00', 4, 8.0);
 INSERT INTO Avalia (cpf_c, id, valor) VALUES ('500.000.000-00', 4, 9.0);
 
