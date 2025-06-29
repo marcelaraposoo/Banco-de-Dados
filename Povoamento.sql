@@ -34,7 +34,6 @@ INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUE
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('69037-042', 95, NULL, 'Av. Torquato Tapajós', 'CDU', 'Recife');
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('29055-310', 809, NULL, 'Rua Alegria', 'Brasilit', 'Recife');
 
-
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('51020-000', 500, NULL, 'Rua Barão de Souza Leão', 'Boa Viagem', 'Recife');
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('11060-001', 152, NULL, 'Av. Ana Costa', 'Gonzaga', 'Santos');
 INSERT INTO Endereco (cep, num_endereco, complemento, rua, bairro, cidade) VALUES ('41820-020', 310, NULL, 'Rua Barão de Itapoan', 'CDU', 'Recife');
@@ -121,7 +120,6 @@ INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (5, '120.000.
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (5, '130.000.000-00', 'Funcionário', '110.000.000-00');
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (4, '140.000.000-00', 'Supervisor', '110.000.000-00');
 INSERT INTO Funcionario (num_alugueis, cpf_f, cargo, cpf_s) VALUES (3, '150.000.000-00', 'Funcionário', '110.000.000-00');
-
 
 -- Tabela Produto
 DECLARE
@@ -211,61 +209,6 @@ BEGIN
     INSERT INTO Criadores_produto VALUES (v_id, 'Markus Zusak');
 END;
 /
-/*
-
--- Filmes
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Vingadores: Ultimato', '181', TO_DATE('26/04/2019','DD/MM/YYYY'), 10, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Rei Leão', '118', TO_DATE('19/07/2019','DD/MM/YYYY'), 5, 1);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Interstellar', '169', TO_DATE('07/11/2014','DD/MM/YYYY'), 8, 3);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Joker', '122', TO_DATE('04/10/2019','DD/MM/YYYY'), 7, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'The Matrix', '136', TO_DATE('31/03/1999','DD/MM/YYYY'), 6, 4);
--- Livros
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, '1984', '328', TO_DATE('08/06/1949','DD/MM/YYYY'), 12, 5);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Senhor dos Anéis: A Sociedade do Anel', '576', TO_DATE('29/07/1954','DD/MM/YYYY'), 9, 3);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'O Hobbit', '336', TO_DATE('21/09/1937','DD/MM/YYYY'), 7, 2);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'Dom Quixote', '863', TO_DATE('16/01/1605','DD/MM/YYYY'), 5, 1);
-INSERT INTO Produto (id, titulo, tamanho, lancamento, estoque, qnt_alugada) VALUES (id.NEXTVAL, 'A Menina que Roubava Livros', '480', TO_DATE('14/03/2005','DD/MM/YYYY'), 6, 2);
-
--- Tabela Genero_produto
-INSERT INTO Genero_produto (id_produto, genero) VALUES (1, 'Ação');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (1, 'Ficção');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (2, 'Animação');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (3, 'Ficção Científica');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (4, 'Drama');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (4, 'Suspense');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (5, 'Ação');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (5, 'Ficção Científica');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (6, 'Ficção Científica');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (7, 'Fantasia');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (8, 'Fantasia');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (9, 'Clássico');
-INSERT INTO Genero_produto (id_produto, genero) VALUES (10, 'Drama');
-
--- Tabela Produtora_produto
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (1, 'Marvel Studios');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (2, 'Disney');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (3, 'Paramount Pictures');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (4, 'Warner Bros.');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (5, 'Warner Bros.');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (6, 'Companhia das Letras');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (7, 'HarperCollins');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (8, 'HarperCollins');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (9, 'Editora 34');
-INSERT INTO Produtora_produto (id_produto, produtora) VALUES (10, 'Intrínseca');
-
--- Tabela Criadores_produto
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (1, 'Anthony Russo');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (2, 'Jon Favreau');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (3, 'Christopher Nolan');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (4, 'Todd Phillips');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (5, 'Lana Wachowski');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (6, 'George Orwell');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (7, 'J.R.R. Tolkien');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (8, 'J.R.R. Tolkien');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (9, 'Miguel de Cervantes');
-INSERT INTO Criadores_produto (id_produto, criadores) VALUES (10, 'Markus Zusak');
-*/
-
 
 -- Tabela Bonus
 INSERT INTO Bonus (id_bonus, valor) VALUES (1, 10.00);
@@ -281,7 +224,6 @@ INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '600.
 INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '700.000.000-00', 130.00, 2);
 INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '800.000.000-00', 95.00, 3);
 INSERT INTO Conta (num, cpf_cc, credito, qnt_alugada) VALUES (num.NEXTVAL, '900.000.000-00', 50.00, 2);
-
 
 -- Tabela Ganha
 INSERT INTO Ganha (num_conta, id_bonus) VALUES (1, 1);
@@ -305,47 +247,44 @@ INSERT INTO Avalia2 (cpf_responsavel, num_seq, id, valor) VALUES ('600.000.000-0
 INSERT INTO Avalia2 (cpf_responsavel, num_seq, id, valor) VALUES ('600.000.000-00', 1, 8, 8.0);
 INSERT INTO Avalia2 (cpf_responsavel, num_seq, id, valor) VALUES ('700.000.000-00', 2, 2, 10.0);
 
--- Tbaela Aluga
-
----p1
+-- Tabela Aluga
+-- p1
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('110.000.000-00', 1, 1, TO_DATE('01/06/2025','DD/MM/YYYY'), 0, 15.00, 'Cartão de Crédito', TO_DATE('08/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('140.000.000-00', 3, 1, TO_DATE('02/06/2025','DD/MM/YYYY'), 0, 15.00, 'Cartão de Débito', TO_DATE('09/06/2025','DD/MM/YYYY'));
 
----p2
+-- p2
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('110.000.000-00', 6, 2, TO_DATE('03/06/2025','DD/MM/YYYY'), 0, 12.00, 'Dinheiro', TO_DATE('10/06/2025','DD/MM/YYYY'));
 
----p3
+-- p3
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('120.000.000-00', 3, 3, TO_DATE('05/06/2025','DD/MM/YYYY'), 5.00, 18.00, 'Pix', TO_DATE('12/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('150.000.000-00', 1, 3, TO_DATE('04/06/2025','DD/MM/YYYY'), 0, 18.00, 'Pix', TO_DATE('11/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('120.000.000-00', 7, 3, TO_DATE('05/06/2025','DD/MM/YYYY'), 3.00, 18.00, 'Dinheiro', TO_DATE('12/06/2025','DD/MM/YYYY'));
 
----p4
+-- p4
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('120.000.000-00', 4, 4, TO_DATE('06/06/2025','DD/MM/YYYY'), 0, 10.00, 'Cartão de Débito', TO_DATE('13/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('130.000.000-00', 8, 4, TO_DATE('05/06/2025','DD/MM/YYYY'), 0, 10.00, 'Cartão de Crédito', TO_DATE('12/06/2025','DD/MM/YYYY'));
 
-----p5
+-- p5
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('140.000.000-00', 5, 5, TO_DATE('06/06/2025','DD/MM/YYYY'), 0, 12.00, 'Boleto', TO_DATE('13/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('150.000.000-00', 8, 5, TO_DATE('07/06/2025','DD/MM/YYYY'), 0, 12.00, 'Cartão de Débito', TO_DATE('14/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('110.000.000-00', 9, 5, TO_DATE('08/06/2025','DD/MM/YYYY'), 5.00, 12.00, 'Pix', TO_DATE('15/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('130.000.000-00', 1, 5, TO_DATE('07/06/2025','DD/MM/YYYY'), 2.00, 12.00, 'Boleto', TO_DATE('14/06/2025','DD/MM/YYYY'));
 
-
----- p6
+-- p6
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('130.000.000-00', 1, 6, TO_DATE('08/06/2025','DD/MM/YYYY'), 0, 8.00, 'Cartão de Crédito', TO_DATE('15/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('120.000.000-00', 6, 6, TO_DATE('03/06/2025','DD/MM/YYYY'), 0, 8.00, 'Dinheiro', TO_DATE('10/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('130.000.000-00', 2, 6, TO_DATE('04/06/2025','DD/MM/YYYY'), 0, 8.00, 'Cartão de Crédito', TO_DATE('11/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('140.000.000-00', 3, 6, TO_DATE('05/06/2025','DD/MM/YYYY'), 2.00, 8.00, 'Boleto', TO_DATE('12/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('150.000.000-00', 4, 6, TO_DATE('06/06/2025','DD/MM/YYYY'), 0, 8.00, 'Cartão de Débito', TO_DATE('13/06/2025','DD/MM/YYYY'));
 
-
----- p7
+-- p7
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('110.000.000-00', 7, 7, TO_DATE('07/06/2025','DD/MM/YYYY'), 0, 20.00, 'Pix', TO_DATE('14/06/2025','DD/MM/YYYY'));
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('120.000.000-00', 8, 7, TO_DATE('08/06/2025','DD/MM/YYYY'), 0, 20.00, 'Dinheiro', TO_DATE('15/06/2025','DD/MM/YYYY'));
 
--- Produto 8 
+-- p8 
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('130.000.000-00', 9, 8, TO_DATE('09/06/2025','DD/MM/YYYY'), 0, 15.00, 'Cartão de Crédito', TO_DATE('16/06/2025','DD/MM/YYYY'));
 
--- Produto 9 
+-- p9 
 
--- Produto 10 
+-- p10 
 INSERT INTO Aluga (cpf_f, num, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao) VALUES ('140.000.000-00', 2, 10, TO_DATE('10/06/2025','DD/MM/YYYY'), 0, 12.00, 'Boleto', TO_DATE('17/06/2025','DD/MM/YYYY'));
