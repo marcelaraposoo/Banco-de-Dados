@@ -39,7 +39,7 @@ SELECT  P.genero, SUM(F.num_alugueis)
 from Pessoa P
 JOIN Funcionario F ON P.cpf=F.cpf_f
 WHERE F.cargo != 'Supervisor'
-GROUP BY P.genero
+GROUP BY P.genero;
 
 -- 18. e 17. SUBCONSULTA COM IN e SUBCONSULTA COM OPERADOR RELACIONAL: mandar email pros cliente que moram perto da locadora, avisando de uma noite de filme na frente da locadora
 SELECT E.email
@@ -48,7 +48,7 @@ WHERE E.cpf_e IN (SELECT C.cpf_c
                 FROM  Cliente C
                 JOIN Pessoa P ON C.cpf_c=P.cpf
                 JOIN Endereco EN ON P.cep=EN.cep AND P.num_endereco=EN.num_endereco
-                WHERE EN.bairro IN ('Várzea', 'CDU', 'Brasilit') AND (SYSDATE - P.nascimento) >= (18 * 365))
+                WHERE EN.bairro IN ('Várzea', 'CDU', 'Brasilit') AND (SYSDATE - P.nascimento) >= (18 * 365));
 
 -- 21. ORDER BY: pecas alugadas dos produtos
 SELECT P.qnt_alugada, P.titulo
@@ -60,7 +60,7 @@ SELECT P.nome, id_bonus
 FROM Pessoa P
 RIGHT JOIN Cliente C ON P.cpf=C.cpf_c
 JOIN Conta ON C.cpf_c=Conta.cpf_cc
-LEFT JOIN GANHA G ON Conta.num=G.num_conta
+LEFT JOIN GANHA G ON Conta.num=G.num_conta;
 
 -- 19. SUBCONSULTA COM ANY: avaliacões dos produtos (feita pelos clientes)(tirando a pior das avaliaçoes)
 SELECT P.titulo, AV.valor
@@ -68,7 +68,7 @@ from Avalia  AV
 JOIN Produto P on AV.id=P.id
 WHERE AV.valor > ANY (SELECT AV2.valor
                     FROM Avalia AV2
-                    WHERE AV2.id = AV.id)
+                    WHERE AV2.id = AV.id);
 
 -- 20. SUBCONSULTA COM ALL: funcionario que mais vendoeu
 SELECT P.nome, F.num_alugueis
@@ -76,27 +76,26 @@ FROM Pessoa P
 JOIN Funcionario F ON P.cpf=F.cpf_f
 WHERE F.num_alugueis>= ALL(SELECT F2.num_alugueis
                         FROM Funcionario F2
-                        WHERE F2.cpf_f != F.cpf_f
-                        )
+                        WHERE F2.cpf_f != F.cpf_f);
 
 -- 23. HAVING: produtos having  media da avaliacao  maior que 7
 SELECT P.titulo, AVG(AV.valor) AS Média_avaliação
 FROM Avalia AV 
 JOIN Produto P ON AV.id=P.id
 GROUP  BY P.titulo
-HAVING AVG(AV.valor)>7
+HAVING AVG(AV.valor)>7;
 
 -- 1. ALTER TABLE: alterar a existência da coluna "complemento"
 ALTER TABLE Endereco
-DROP COLUMN Complemento
+DROP COLUMN Complemento;
 
--- 2. CREATE INDEX: criar índice para (cep + número da residência) para facilitar consultas
-CREATE INDEX end_pessoas
-ON Endereco (cep, num_endereco)
+-- 2. CREATE INDEX: criar índice para um produto com uma junção única para facilitar consultas
+CREATE INDEX prod_unico
+ON Produto (titulo, tamanho, lancamento);
 
 -- 3. INSERT INTO: adicionando dependente novo
 INSERT INTO Cliente (cpf_c, cpf_indicador)
-VALUES ('110.000.000-00', NULL)
+VALUES ('110.000.000-00', NULL);
 
 -- 4. UPDATE: update do salário do crago supervisor
 UPDATE Cargo
@@ -117,7 +116,7 @@ WHERE cpf IN (
 
 -- 7. BETWEEN: criar tabela que retorna todas as melhores avaliações entre 8.5 e 10
 CREATE VIEW avaliacoes AS
-SELECT A.id, B.id
+SELECT A.id AS id_avalia, B.id id_avalia2
 FROM Avalia A, Avalia2 B
 WHERE A.valor BETWEEN 8.5 AND 10.00
 AND B.valor BETWEEN 8.5 AND 10.00;
