@@ -25,17 +25,14 @@
 
 /*
 -- PL
+
 1. USO DE RECORD
 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE
 3. BLOCO ANÔNIMO
 4. CREATE PROCEDURE
 5. CREATE FUNCTION
 6. %TYPE
-
-
-
 */
-
 
 -- 22. GROUP BY: número de venda dos funcionário agrupados por homem  mulher
 SELECT  P.genero, SUM(F.num_alugueis)  
@@ -101,10 +98,10 @@ ON Endereco (cep, num_endereco)
 INSERT INTO Cliente (cpf_c, cpf_indicador)
 VALUES ('110.000.000-00', NULL)
 
--- 4. UPDATE: update estoque de livro
-/*UPDATE Produto
-SET estoque = 9
-WHERE id = v_id;*/
+-- 4. UPDATE: update do salário do crago supervisor
+UPDATE Cargo
+SET salario = 5000
+WHERE titulo = 'Supervisor';
 
 -- 5. DELETE: deletar bônus que já foi utilizado
 DELETE FROM Ganha
@@ -118,12 +115,14 @@ WHERE cpf IN (
     FROM Cliente
 );
 
--- 7. BETWEEN: produto com num range de valores específicos
-SELECT id, preco
-FROM Aluga
-WHERE preco BETWEEN 11.00 AND 17.00;
+-- 7. BETWEEN: criar tabela que retorna todas as melhores avaliações entre 8.5 e 10
+CREATE VIEW avaliacoes AS
+SELECT A.id, B.id
+FROM Avalia A, Avalia2 B
+WHERE A.valor BETWEEN 8.5 AND 10.00
+AND B.valor BETWEEN 8.5 AND 10.00;
 
--- 24. UNION ou INTERSECT ou MINUS:
+-- 24. UNION ou INTERSECT ou MINUS: lista de cpfs que são clientes e funcionários ao mesmo tempo
 SELECT cpf_c FROM Cliente
 INTERSECT
 SELECT cpf_f FROM Funcionario;
@@ -140,6 +139,7 @@ JOIN Bonus B ON B.id_bonus = G.id_bonus;
 GRANT SELECT ON Funcionario TO vw_clientes_com_bonus;
 REVOKE SELECT ON Funcionario FROM vw_clientes_com_bonus;
 
+-- PL
 
 -- 1. USO DE RECORD: Mostrar os dados (nome, cargo e números de aluguéis) de um funcionário específico.
 DECLARE
@@ -163,7 +163,6 @@ BEGIN
 END;
 
 -- 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE
-
 
 -- 3. BLOCO ANÔNIMO: Mostrar o total de produtos avaliados pelo cliente ‘Lucas Souza’.
 DECLARE
@@ -196,7 +195,6 @@ BEGIN
     info_conta_cliente('100.000.000-00');
 END;
 
-
 -- 5. CREATE FUNCTION: Função que retorna o total de dependentes de um cliente.
 CREATE OR REPLACE FUNCTION total_dependentes (p_cpf Pessoa.cpf%TYPE) RETURN NUMBER IS
     v_total NUMBER;
@@ -212,8 +210,6 @@ END;
 BEGIN
   DBMS_OUTPUT.PUT_LINE('Dependentes: ' || total_dependentes('100.000.000-00'));
 END;
-
-
 
 -- 6. %TYPE: 
 DECLARE
