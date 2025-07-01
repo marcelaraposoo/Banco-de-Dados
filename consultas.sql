@@ -19,7 +19,23 @@
 22. GROUP BY
 23. HAVING
 24. UNION ou INTERSECT ou MINUS
+25. CREATE VIEW
+26. GRANT / REVOKE
 */
+
+/*
+-- PL
+1. USO DE RECORD
+2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE
+3. BLOCO ANÔNIMO
+4. CREATE PROCEDURE
+5. CREATE FUNCTION
+6. %TYPE
+
+
+
+*/
+
 
 -- 22. GROUP BY: número de venda dos funcionário agrupados por homem  mulher
 SELECT  P.genero, SUM(F.num_alugueis)  
@@ -111,3 +127,107 @@ WHERE preco BETWEEN 11.00 AND 17.00;
 SELECT cpf_c FROM Cliente
 INTERSECT
 SELECT cpf_f FROM Funcionario;
+
+-- 25. CREATE VIEW: retorna tabela com o nome dos clientes e o seu bonus
+CREATE VIEW vw_clientes_com_bonus AS
+SELECT P.nome, B.valor
+FROM Pessoa P 
+JOIN Conta C ON P.cpf = C.cpf_cc
+JOIN Ganha G ON G.num_conta = C.num
+JOIN Bonus B ON B.id_bonus = G.id_bonus;
+
+-- 26. GRANT / REVOKE: 
+GRANT SELECT ON Funcionario TO vw_clientes_com_bonus;
+REVOKE SELECT ON Funcionario FROM vw_clientes_com_bonus;
+
+
+-- 1. USO DE RECORD: Mostrar os dados (nome, cargo e números de aluguéis) de um funcionário específico.
+DECLARE
+  TYPE tipo_func IS RECORD (
+    nome Pessoa.nome%TYPE,
+    cargo Funcionario.cargo%TYPE,
+    num_alugueis Funcionario.num_alugueis%TYPE
+  );
+
+  func_info tipo_func;
+BEGIN
+  SELECT P.nome, F.cargo, F.num_alugueis
+  INTO func_info
+  FROM Pessoa P
+  JOIN Funcionario F ON P.cpf = F.cpf_f
+  WHERE P.nome = 'Carla Mendes';
+
+  DBMS_OUTPUT.PUT_LINE('Nome: ' || func_info.nome);
+  DBMS_OUTPUT.PUT_LINE('Cargo: ' || func_info.cargo);
+  DBMS_OUTPUT.PUT_LINE('Nº Aluguéis: ' || func_info.num_alugueis);
+END;
+
+-- 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE
+
+
+-- 3. BLOCO ANÔNIMO: Mostrar o total de produtos avaliados pelo cliente ‘Lucas Souza’.
+DECLARE
+    total NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO total
+    FROM Avalia A
+    JOIN Pessoa P ON A.cpf_c = P.cpf
+    WHERE P.nome = 'Lucas Souza';
+
+    DBMS_OUTPUT.PUT_LINE('Total de produtos avaliados por Lucas Souza: ' || total);
+END;
+
+-- 4. CREATE PROCEDURE: Criar um procedimento que mostra o saldo e a quantidade de produtos alugados de um cliente pelo CPF.
+CREATE OR REPLACE PROCEDURE info_conta_cliente (p_cpf IN Conta.cpf_cc%TYPE) AS
+    v_credito Conta.credito%TYPE;
+    v_qtd Conta.qnt_alugada%TYPE;
+BEGIN
+    SELECT credito, qnt_alugada
+    INTO v_credito, v_qtd
+    FROM Conta
+    WHERE cpf_cc = p_cpf;
+
+    DBMS_OUTPUT.PUT_LINE('Crédito: R$' || v_credito);
+    DBMS_OUTPUT.PUT_LINE('Qtd. Alugada: ' || v_qtd);
+END;
+
+BEGIN
+    info_conta_cliente('100.000.000-00');
+END;
+
+
+-- 5. CREATE FUNCTION: Função que retorna o total de dependentes de um cliente.
+CREATE OR REPLACE FUNCTION total_dependentes (p_cpf Pessoa.cpf%TYPE) RETURN NUMBER IS
+    v_total NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_total
+    FROM Dependente
+    WHERE cpf_responsavel = p_cpf;
+
+    RETURN v_total;
+END;
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Dependentes: ' || total_dependentes('100.000.000-00'));
+END;
+
+
+
+-- 6. %TYPE: 
+DECLARE
+    v_nome Pessoa.nome%TYPE;
+    v_alugueis Funcionario.num_alugueis%TYPE;
+BEGIN
+    SELECT nome, num_alugueis
+    INTO v_nome, v_alugueis
+    FROM Pessoa P
+    JOIN Funcionario F ON P.cpf = F.cpf_f
+    WHERE P.nome = 'Fernanda Lima';
+
+    DBMS_OUTPUT.PUT_LINE('Nome: ' || v_nome);
+    DBMS_OUTPUT.PUT_LINE('Aluguéis realizados: ' || v_alugueis);
+END;
+
+
