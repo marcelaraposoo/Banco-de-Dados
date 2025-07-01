@@ -88,7 +88,7 @@ CREATE TABLE Produto(
 CREATE TABLE Genero_produto(
     id_produto INTEGER NOT NULL, 
     genero VARCHAR2(25) NOT NULL,
-    CONSTRAINT gerenero_produto_pkey PRIMARY KEY (id_produto, genero),
+    CONSTRAINT genero_produto_pkey PRIMARY KEY (id_produto, genero),
     CONSTRAINT genero_produto_fkey FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 

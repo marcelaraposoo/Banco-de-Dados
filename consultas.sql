@@ -226,3 +226,204 @@ BEGIN
 END;
 
 
+
+-- ---------------- PL -----------------------
+-- 14. CURSOR (OPEN, FETCH e CLOSE)
+DECLARE
+  CURSOR c_produtos_baixo_estoque IS
+    SELECT titulo, estoque
+    FROM Produto
+    WHERE estoque <= 5;
+
+  v_titulo  Produto.titulo%TYPE;
+  v_estoque Produto.estoque%TYPE;
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Relatório de Produtos com Baixo Estoque:');
+  
+  OPEN c_produtos_baixo_estoque;
+  LOOP
+    FETCH c_produtos_baixo_estoque INTO v_titulo, v_estoque;
+    EXIT WHEN c_produtos_baixo_estoque%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE('-> Produto: "' || v_titulo || '" | Estoque: ' || v_estoque);
+  END LOOP;
+  CLOSE c_produtos_baixo_estoque;
+  
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Ocorreu um erro no teste do cursor: ' || SQLERRM);
+    IF c_produtos_baixo_estoque%ISOPEN THEN
+      CLOSE c_produtos_baixo_estoque;
+    END IF;
+END;
+/
+
+-- 15. EXCEPTION WHEN
+DECLARE
+  v_cpf_teste Pessoa.cpf%TYPE := '100.000.000-00';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Tentando inserir CPF duplicado: ' || v_cpf_teste);
+
+  INSERT INTO Pessoa (cpf, nome, genero, nascimento, cep, num_endereco)
+  VALUES (v_cpf_teste, 'Pessoa Teste', 'H', SYSDATE, '55580-000', 101);
+
+  DBMS_OUTPUT.PUT_LINE('Pessoa inserida com sucesso (isso não deve acontecer).');
+  COMMIT;
+
+EXCEPTION
+  WHEN DUP_VAL_ON_INDEX THEN
+    DBMS_OUTPUT.PUT_LINE('-> SUCESSO: Exceção DUP_VAL_ON_INDEX capturada corretamente.');
+    ROLLBACK;
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Ocorreu um erro inesperado no teste de exceção: ' || SQLERRM);
+    ROLLBACK;
+END;
+/
+
+-- 16. USO DE PARÂMETROS (IN, OUT)
+CREATE OR REPLACE PROCEDURE obter_dados_cliente (
+  p_cpf_cliente   IN  Pessoa.cpf%TYPE,
+  p_nome_cliente  OUT Pessoa.nome%TYPE,
+  p_cidade_cliente OUT Endereco.cidade%TYPE
+) IS
+BEGIN
+  SELECT p.nome, e.cidade
+  INTO   p_nome_cliente, p_cidade_cliente
+  FROM   Pessoa p
+  JOIN   Endereco e ON p.cep = e.cep AND p.num_endereco = e.num_endereco
+  WHERE  p.cpf = p_cpf_cliente;
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    p_nome_cliente := 'Cliente não encontrado para o CPF informado.';
+    p_cidade_cliente := NULL;
+  WHEN OTHERS THEN
+    p_nome_cliente := 'Ocorreu um erro na consulta.';
+    p_cidade_cliente := NULL;
+END obter_dados_cliente;
+/
+
+-- Bloco de teste para a procedure
+DECLARE
+  v_nome   Pessoa.nome%TYPE;
+  v_cidade Endereco.cidade%TYPE;
+  v_cpf_teste Pessoa.cpf%TYPE := '200.000.000-00';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Chamando procedure para o CPF: ' || v_cpf_teste);
+  
+  obter_dados_cliente(v_cpf_teste, v_nome, v_cidade);
+  
+  DBMS_OUTPUT.PUT_LINE('-> Nome retornado: ' || v_nome);
+  DBMS_OUTPUT.PUT_LINE('-> Cidade retornada: ' || v_cidade);
+END;
+/
+
+-- 17. CREATE OR REPLACE PACKAGE (SPECIFICATION)
+CREATE OR REPLACE PACKAGE pkg_gerenciamento_locadora AS
+  PROCEDURE registrar_aluguel (
+    p_cpf_funcionario IN Funcionario.cpf_f%TYPE,
+    p_cpf_cliente     IN Cliente.cpf_c%TYPE,
+    p_id_produto      IN Produto.id%TYPE,
+    p_forma_pgmto     IN Aluga.forma_pgmto%TYPE,
+    p_preco           IN Aluga.preco%TYPE
+  );
+
+  FUNCTION calcular_multa (
+    p_cpf_cliente     IN Cliente.cpf_c%TYPE,
+    p_id_produto      IN Produto.id%TYPE
+  ) RETURN NUMBER;
+END pkg_gerenciamento_locadora;
+/
+
+-- 18. CREATE OR REPLACE PACKAGE BODY
+CREATE OR REPLACE PACKAGE BODY pkg_gerenciamento_locadora AS
+  PROCEDURE registrar_aluguel (
+    p_cpf_funcionario IN Funcionario.cpf_f%TYPE,
+    p_cpf_cliente     IN Cliente.cpf_c%TYPE,
+    p_id_produto      IN Produto.id%TYPE,
+    p_forma_pgmto     IN Aluga.forma_pgmto%TYPE,
+    p_preco           IN Aluga.preco%TYPE
+  ) IS
+    v_num_conta Conta.num%TYPE;
+    v_estoque   Produto.estoque%TYPE;
+  BEGIN
+    SELECT estoque INTO v_estoque FROM Produto WHERE id = p_id_produto;
+    IF v_estoque <= 0 THEN
+      RAISE_APPLICATION_ERROR(-20005, 'Produto sem estoque disponível.');
+    END IF;
+
+    SELECT num INTO v_num_conta FROM Conta WHERE cpf_cc = p_cpf_cliente;
+
+    INSERT INTO Aluga (cpf_f, num, cpf_cli, id, data_inicio, multa, preco, forma_pgmto, prazo_devolucao)
+    VALUES (p_cpf_funcionario, v_num_conta, p_cpf_cliente, p_id_produto, SYSDATE, 0, p_preco, p_forma_pgmto, SYSDATE + 7);
+
+    COMMIT;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      ROLLBACK;
+      RAISE_APPLICATION_ERROR(-20006, 'Cliente ou Produto não encontrado.');
+    WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
+  END registrar_aluguel;
+
+  FUNCTION calcular_multa (
+    p_cpf_cliente     IN Cliente.cpf_c%TYPE,
+    p_id_produto      IN Produto.id%TYPE
+  ) RETURN NUMBER IS
+    v_prazo_devolucao DATE;
+    v_dias_atraso     NUMBER;
+    v_multa           NUMBER := 0;
+  BEGIN
+    SELECT prazo_devolucao
+    INTO v_prazo_devolucao
+    FROM Aluga
+    WHERE cpf_cli = p_cpf_cliente AND id = p_id_produto
+    ORDER BY data_inicio DESC
+    FETCH FIRST 1 ROW ONLY;
+
+    v_dias_atraso := TRUNC(SYSDATE) - TRUNC(v_prazo_devolucao);
+
+    IF v_dias_atraso > 0 THEN
+      v_multa := v_dias_atraso * 2.50;
+    END IF;
+
+    RETURN v_multa;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RETURN 0;
+  END calcular_multa;
+END pkg_gerenciamento_locadora;
+/
+
+-- 19. CREATE OR REPLACE TRIGGER (COMANDO)
+CREATE OR REPLACE TRIGGER trg_protege_cargo
+BEFORE INSERT OR UPDATE OR DELETE ON Cargo
+BEGIN
+  RAISE_APPLICATION_ERROR(-20010, 'A tabela CARGO é crítica e não pode ser modificada diretamente.');
+END;
+/
+
+-- 20. CREATE OR REPLACE TRIGGER (LINHA)
+CREATE OR REPLACE TRIGGER trg_atualiza_aluguel
+AFTER INSERT ON Aluga
+FOR EACH ROW
+BEGIN
+  UPDATE Produto
+  SET estoque = estoque - 1,
+      qnt_alugada = qnt_alugada + 1
+  WHERE id = :NEW.id;
+
+  UPDATE Funcionario
+  SET num_alugueis = num_alugueis + 1
+  WHERE cpf_f = :NEW.cpf_f;
+
+  UPDATE Conta
+  SET qnt_alugada = qnt_alugada + 1
+  WHERE num = :NEW.num AND cpf_cc = :NEW.cpf_cli;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE_APPLICATION_ERROR(-20015, 'Falha ao atualizar os contadores de aluguel. A operação foi cancelada.');
+END;
+/
