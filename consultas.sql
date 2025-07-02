@@ -264,6 +264,143 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Aluguéis realizados: ' || v_alugueis);
 END;
 
+-- 7. %ROWTYPE e 13. SELECT … INTO --
+
+DECLARE
+  v_func_rec       Funcionario%ROWTYPE;
+  v_nome           Pessoa.nome%TYPE;
+  v_cpf_funcionario  Funcionario.cpf_f%TYPE := '130.000.000-00';
+
+BEGIN
+  SELECT *
+  INTO v_func_rec
+  FROM Funcionario
+  WHERE cpf_f = v_cpf_funcionario;
+
+  SELECT nome
+  INTO v_nome
+  FROM Pessoa
+  WHERE cpf = v_cpf_funcionario;
+
+  DBMS_OUTPUT.PUT_LINE('--- Detalhes do Funcionário ---');
+  DBMS_OUTPUT.PUT_LINE('Nome: ' || v_nome);
+  DBMS_OUTPUT.PUT_LINE('CPF: ' || v_func_rec.cpf_f);
+  DBMS_OUTPUT.PUT_LINE('Cargo: ' || v_func_rec.cargo);
+  DBMS_OUTPUT.PUT_LINE('Supervisor (CPF): ' || v_func_rec.cpf_s);
+  DBMS_OUTPUT.PUT_LINE('Nº de Aluguéis: ' || v_func_rec.num_alugueis);
+END;
+
+-- 8. IF ELSIF --
+DECLARE
+  v_salario     Cargo.salario%TYPE;
+  v_nome        Pessoa.nome%TYPE;
+  v_cargo       Funcionario.cargo%TYPE;
+  v_classificacao VARCHAR2(20);
+  v_cpf_func    Funcionario.cpf_f%TYPE := '140.000.000-00';
+BEGIN
+  SELECT c.salario, p.nome, f.cargo
+  INTO v_salario, v_nome, v_cargo
+  FROM Funcionario f
+  JOIN Pessoa p ON f.cpf_f = p.cpf
+  JOIN Cargo c ON f.cargo = c.titulo
+  WHERE f.cpf_f = v_cpf_func; 
+
+  DBMS_OUTPUT.PUT_LINE('Analisando ' || v_nome || ' (Cargo: ' || v_cargo || ')...');
+
+  IF v_salario > 4000 THEN
+    v_classificacao := 'Nível Gerencial';
+  ELSIF v_salario > 2000 THEN
+    v_classificacao := 'Nível Operacional';
+  ELSE
+    v_classificacao := 'Nível de Entrada';
+  END IF;
+
+  DBMS_OUTPUT.PUT_LINE('Classificação: ' || v_classificacao || ' (Salário: ' || TO_CHAR(v_salario, 'L9G999D99') || ').');
+END;
+
+-- 9. CASE WHEN --
+SELECT
+  titulo,
+  lancamento,
+  CASE
+    WHEN lancamento < TO_DATE('01/01/2000', 'DD/MM/YYYY') THEN 'Clássico'
+    ELSE 'Moderno'
+  END AS Categoria_Temporal
+FROM Produto;
+
+-- 10. LOOP ... EXIT WHEN --
+DECLARE
+  v_num_conta       Conta.num%TYPE := 1;
+  v_credito_cliente Conta.credito%TYPE;
+
+  v_alugueis_feitos NUMBER := 0;
+  v_custo_aluguel   CONSTANT NUMBER := 18.50; -- Um custo fixo para o exemplo
+
+BEGIN
+  SELECT credito
+  INTO v_credito_cliente
+  FROM Conta
+  WHERE num = v_num_conta;
+
+  DBMS_OUTPUT.PUT_LINE('Iniciando simulação de aluguéis para a conta ' || v_num_conta);
+  DBMS_OUTPUT.PUT_LINE('Crédito inicial: ' || TO_CHAR(v_credito_cliente, 'L999D99'));
+  DBMS_OUTPUT.PUT_LINE('Custo por aluguel: ' || TO_CHAR(v_custo_aluguel, 'L999D99'));
+  DBMS_OUTPUT.PUT_LINE('------------------------------------');
+
+  LOOP
+    EXIT WHEN v_credito_cliente < v_custo_aluguel;
+
+    v_alugueis_feitos := v_alugueis_feitos + 1;
+    v_credito_cliente := v_credito_cliente - v_custo_aluguel;
+
+    DBMS_OUTPUT.PUT_LINE('Aluguel #' || v_alugueis_feitos || ' aprovado. Crédito restante: ' || TO_CHAR(v_credito_cliente, 'L999D99'));
+
+  END LOOP;
+
+  DBMS_OUTPUT.PUT_LINE('------------------------------------');
+  DBMS_OUTPUT.PUT_LINE('Simulação finalizada.');
+  DBMS_OUTPUT.PUT_LINE('Crédito insuficiente para o próximo aluguel.');
+  DBMS_OUTPUT.PUT_LINE('Total de aluguéis realizados: ' || v_alugueis_feitos);
+END;
+
+-- 11. WHILE LOOP --
+DECLARE
+  v_credito_atual Conta.credito%TYPE;
+  v_credito_alvo  NUMBER := 200;
+  v_num_conta     Conta.num%TYPE := 2; -- Conta que existe no Povoamento
+BEGIN
+  SELECT credito INTO v_credito_atual
+  FROM Conta
+  WHERE num = v_num_conta; 
+
+  DBMS_OUTPUT.PUT_LINE('Crédito inicial na conta ' || v_num_conta || ': ' || v_credito_atual);
+
+  WHILE v_credito_atual < v_credito_alvo LOOP
+    v_credito_atual := v_credito_atual + 10; -- Adiciona 10 de crédito
+    DBMS_OUTPUT.PUT_LINE(' +10... Crédito atual: ' || v_credito_atual);
+  END LOOP;
+
+  DBMS_OUTPUT.PUT_LINE('Crédito alvo atingido. Crédito final: ' || v_credito_atual);
+END;
+
+-- 12. FOR IN LOOP --
+DECLARE
+  v_cpf_resp Dependente.cpf_responsavel%TYPE := '700.000.000-00';
+  v_nome_resp  Pessoa.nome%TYPE;
+BEGIN
+  SELECT nome INTO v_nome_resp FROM Pessoa WHERE cpf = v_cpf_resp; 
+
+  DBMS_OUTPUT.PUT_LINE('--- Lista de Dependentes de ' || v_nome_resp || ' ---');
+
+  FOR rec IN (SELECT nome FROM Dependente WHERE cpf_responsavel = v_cpf_resp) LOOP
+    DBMS_OUTPUT.PUT_LINE('> ' || rec.nome);
+  END LOOP;
+
+  DBMS_OUTPUT.PUT_LINE('--- Fim da Lista ---');
+END;
+
+-- 13. SELECT … INTO está junto com o 7. %ROWTYPE --
+
 -- 14. CURSOR (OPEN, FETCH e CLOSE)
 DECLARE
   CURSOR c_produtos_baixo_estoque IS
@@ -292,7 +429,6 @@ EXCEPTION
       CLOSE c_produtos_baixo_estoque;
     END IF;
 END;
-/
 
 -- 15. EXCEPTION WHEN
 DECLARE
