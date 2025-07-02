@@ -178,7 +178,22 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Nº Aluguéis: ' || func_info.num_alugueis);
 END;
 
--- 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE
+-- 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE: lista de créditos de contas de clientes
+DECLARE
+    TYPE t_creditos IS TABLE OF Conta.credito%TYPE INDEX BY PLS_INTEGER;
+    lista_creditos t_creditos;
+    contador NUMBER := 0;
+BEGIN
+    FOR rec IN (SELECT credito FROM Conta WHERE qnt_alugada > 0) LOOP
+        contador := contador + 1;
+        lista_creditos(contador) := rec.credito;
+    END LOOP;
+
+    FOR i IN 1..contador LOOP
+        DBMS_OUTPUT.PUT_LINE('Credito ' || i || ': R$ ' || lista_creditos(i));
+    END LOOP;
+END;
+/
 
 -- 3. BLOCO ANÔNIMO: Mostrar o total de produtos avaliados pelo cliente ‘Lucas Souza’.
 DECLARE
@@ -194,40 +209,47 @@ BEGIN
 END;
 
 -- 4. CREATE PROCEDURE: Criar um procedimento que mostra o saldo e a quantidade de produtos alugados de um cliente pelo CPF.
-CREATE OR REPLACE PROCEDURE info_conta_cliente (p_cpf IN Conta.cpf_cc%TYPE) AS
+CREATE OR REPLACE PROCEDURE info_conta_cliente (
+    p_cpf IN Conta.cpf_cc%TYPE
+) AS
     v_credito Conta.credito%TYPE;
-    v_qtd Conta.qnt_alugada%TYPE;
+    v_qnt_alugada NUMBER;
 BEGIN
     SELECT credito, qnt_alugada
-    INTO v_credito, v_qtd
+    INTO v_credito, v_qnt_alugada
     FROM Conta
-    WHERE cpf_cc = p_cpf;
+    WHERE cpf_cc = p_cpf
+    AND ROWNUM = 1;
 
-    DBMS_OUTPUT.PUT_LINE('Crédito: R$' || v_credito);
-    DBMS_OUTPUT.PUT_LINE('Qtd. Alugada: ' || v_qtd);
+    DBMS_OUTPUT.PUT_LINE('Saldo (crédito): R$ ' || TO_CHAR(v_credito, '999G999D99'));
+    DBMS_OUTPUT.PUT_LINE('Quantidade total de produtos alugados: ' || v_qnt_alugada);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Cliente não encontrado com o CPF: ' || p_cpf);
 END;
-
+/
 BEGIN
     info_conta_cliente('100.000.000-00');
 END;
+/
 
--- 5. CREATE FUNCTION: Função que retorna o total de dependentes de um cliente.
-CREATE OR REPLACE FUNCTION total_dependentes (p_cpf Pessoa.cpf%TYPE) RETURN NUMBER IS
-    v_total NUMBER;
+
+-- 5. CREATE FUNCTION: Função que retorna a quantidade de itens na locadorda.
+CREATE OR REPLACE FUNCTION total_estoque RETURN NUMBER IS
+    v_total_estoque NUMBER := 0;
 BEGIN
-    SELECT COUNT(*)
-    INTO v_total
-    FROM Dependente
-    WHERE cpf_responsavel = p_cpf;
+    SELECT NVL(SUM(estoque), 0)
+    INTO v_total_estoque
+    FROM Produto;
 
-    RETURN v_total;
+    RETURN v_total_estoque;
 END;
+/
+SELECT total_estoque() AS estoque_total FROM dual;
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Dependentes: ' || total_dependentes('100.000.000-00'));
-END;
 
--- 6. %TYPE: 
+-- 6. %TYPE
 DECLARE
     v_nome Pessoa.nome%TYPE;
     v_alugueis Funcionario.num_alugueis%TYPE;
