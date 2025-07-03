@@ -258,7 +258,8 @@ REVOKE SELECT ON Funcionario FROM vw_clientes_com_bonus;
 
 
 
--- 1. USO DE RECORD: Mostrar os dados (nome, cargo e números de aluguéis) de um funcionário específico.
+-- Comandos utilizados: DECLARE, RECORD, SELECT INTO, JOIN, DBMS_OUTPUT
+-- Objetivo: Mostrar os dados (nome, cargo e número de aluguéis) de um funcionário específico utilizando RECORD
 DECLARE
   TYPE tipo_func IS RECORD (
     nome Pessoa.nome%TYPE,
@@ -279,75 +280,85 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Nº Aluguéis: ' || func_info.num_alugueis);
 END;
 
--- 2. USO DE ESTRUTURA DE DADOS DO TIPO TABLE: lista de créditos de contas de clientes
-DECLARE
-    TYPE t_creditos IS TABLE OF Conta.credito%TYPE INDEX BY PLS_INTEGER;
-    lista_creditos t_creditos;
-    contador NUMBER := 0;
-BEGIN
-    FOR rec IN (SELECT credito FROM Conta WHERE qnt_alugada > 0) LOOP
-        contador := contador + 1;
-        lista_creditos(contador) := rec.credito;
-    END LOOP;
 
-    FOR i IN 1..contador LOOP
-        DBMS_OUTPUT.PUT_LINE('Credito ' || i || ': R$ ' || lista_creditos(i));
-    END LOOP;
+-- Comandos utilizados: DECLARE, TABLE, LOOP, DBMS_OUTPUT
+-- Objetivo: Listar os créditos das contas de clientes que alugaram algum produto utilizando estrutura TABLE
+DECLARE
+  TYPE t_creditos IS TABLE OF Conta.credito%TYPE INDEX BY PLS_INTEGER;
+  lista_creditos t_creditos;
+  contador NUMBER := 0;
+BEGIN
+  FOR rec IN (SELECT credito FROM Conta WHERE qnt_alugada > 0) LOOP
+    contador := contador + 1;
+    lista_creditos(contador) := rec.credito;
+  END LOOP;
+
+  FOR i IN 1..contador LOOP
+    DBMS_OUTPUT.PUT_LINE('Credito ' || i || ': R$ ' || lista_creditos(i));
+  END LOOP;
 END;
 /
 
--- 3. BLOCO ANÔNIMO: Mostrar o total de produtos avaliados pelo cliente ‘Lucas Souza’.
-DECLARE
-    total NUMBER;
-BEGIN
-    SELECT COUNT(*)
-    INTO total
-    FROM Avalia A
-    JOIN Pessoa P ON A.cpf_c = P.cpf
-    WHERE P.nome = 'Lucas Souza';
 
-    DBMS_OUTPUT.PUT_LINE('Total de produtos avaliados por Lucas Souza: ' || total);
+-- Comandos utilizados: DECLARE, SELECT INTO, JOIN, DBMS_OUTPUT
+-- Objetivo: Mostrar o total de produtos avaliados por um cliente específico em bloco anônimo
+DECLARE
+  total NUMBER;
+BEGIN
+  SELECT COUNT(*)
+  INTO total
+  FROM Avalia A
+  JOIN Pessoa P ON A.cpf_c = P.cpf
+  WHERE P.nome = 'Lucas Souza';
+
+  DBMS_OUTPUT.PUT_LINE('Total de produtos avaliados por Lucas Souza: ' || total);
 END;
 
--- 4. CREATE PROCEDURE: Criar um procedimento que mostra o saldo e a quantidade de produtos alugados de um cliente pelo CPF.
-CREATE OR REPLACE PROCEDURE info_conta_cliente (
-    p_cpf IN Conta.cpf_cc%TYPE
-) AS
-    v_credito Conta.credito%TYPE;
-    v_qnt_alugada NUMBER;
-BEGIN
-    SELECT credito, qnt_alugada
-    INTO v_credito, v_qnt_alugada
-    FROM Conta
-    WHERE cpf_cc = p_cpf
-    AND ROWNUM = 1;
 
-    DBMS_OUTPUT.PUT_LINE('Saldo (crédito): R$ ' || TO_CHAR(v_credito, '999G999D99'));
-    DBMS_OUTPUT.PUT_LINE('Quantidade total de produtos alugados: ' || v_qnt_alugada);
+-- Comandos utilizados: CREATE PROCEDURE, SELECT INTO, EXCEPTION, DBMS_OUTPUT
+-- Objetivo: Criar um procedimento que mostra o saldo e a quantidade de produtos alugados de um cliente, dado o CPF
+CREATE OR REPLACE PROCEDURE info_conta_cliente (
+  p_cpf IN Conta.cpf_cc%TYPE
+) AS
+  v_credito Conta.credito%TYPE;
+  v_qnt_alugada NUMBER;
+BEGIN
+  SELECT credito, qnt_alugada
+  INTO v_credito, v_qnt_alugada
+  FROM Conta
+  WHERE cpf_cc = p_cpf
+  AND ROWNUM = 1;
+
+  DBMS_OUTPUT.PUT_LINE('Saldo (crédito): R$ ' || TO_CHAR(v_credito, '999G999D99'));
+  DBMS_OUTPUT.PUT_LINE('Quantidade total de produtos alugados: ' || v_qnt_alugada);
 
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('Cliente não encontrado com o CPF: ' || p_cpf);
+  WHEN NO_DATA_FOUND THEN
+    DBMS_OUTPUT.PUT_LINE('Cliente não encontrado com o CPF: ' || p_cpf);
 END;
 /
+
 BEGIN
-    info_conta_cliente('100.000.000-00');
+  info_conta_cliente('100.000.000-00');
 END;
 /
 
 
--- 5. CREATE FUNCTION: Função que retorna a quantidade de itens na locadorda.
+-- Comandos utilizados: CREATE FUNCTION, SELECT INTO, NVL
+-- Objetivo: Criar uma função que retorna a quantidade total de itens em estoque
 CREATE OR REPLACE FUNCTION total_estoque RETURN NUMBER IS
-    v_total_estoque NUMBER := 0;
+  v_total_estoque NUMBER := 0;
 BEGIN
-    SELECT NVL(SUM(estoque), 0)
-    INTO v_total_estoque
-    FROM Produto;
+  SELECT NVL(SUM(estoque), 0)
+  INTO v_total_estoque
+  FROM Produto;
 
-    RETURN v_total_estoque;
+  RETURN v_total_est;
+oque;
 END;
 /
-SELECT total_estoque() AS estoque_total FROM dual;
+
+SELECT total_estoque() AS estoque_total FROM dual
 
 
 -- 6. %TYPE
