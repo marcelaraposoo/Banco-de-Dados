@@ -361,28 +361,28 @@ END;
 SELECT total_estoque() AS estoque_total FROM dual
 
 
--- 6. %TYPE
+-- Comandos utilizados: DECLARE, %TYPE, SELECT INTO, JOIN, DBMS_OUTPUT
+-- Objetivo: Demonstrar o uso de %TYPE ao obter nome e número de aluguéis de uma funcionária
 DECLARE
-    v_nome Pessoa.nome%TYPE;
-    v_alugueis Funcionario.num_alugueis%TYPE;
+  v_nome Pessoa.nome%TYPE;
+  v_alugueis Funcionario.num_alugueis%TYPE;
 BEGIN
-    SELECT nome, num_alugueis
-    INTO v_nome, v_alugueis
-    FROM Pessoa P
-    JOIN Funcionario F ON P.cpf = F.cpf_f
-    WHERE P.nome = 'Fernanda Lima';
+  SELECT nome, num_alugueis
+  INTO v_nome, v_alugueis
+  FROM Pessoa P
+  JOIN Funcionario F ON P.cpf = F.cpf_f
+  WHERE P.nome = 'Fernanda Lima';
 
-    DBMS_OUTPUT.PUT_LINE('Nome: ' || v_nome);
-    DBMS_OUTPUT.PUT_LINE('Aluguéis realizados: ' || v_alugueis);
+  DBMS_OUTPUT.PUT_LINE('Nome: ' || v_nome);
+  DBMS_OUTPUT.PUT_LINE('Aluguéis realizados: ' || v_alugueis);
 END;
 
--- 7. %ROWTYPE e 13. SELECT … INTO --
-
+-- Comandos utilizados: DECLARE, %ROWTYPE, %TYPE, SELECT INTO, DBMS_OUTPUT
+-- Objetivo: Demonstrar o uso de %ROWTYPE e SELECT INTO ao exibir dados de um funcionário pelo CPF
 DECLARE
-  v_func_rec       Funcionario%ROWTYPE;
-  v_nome           Pessoa.nome%TYPE;
-  v_cpf_funcionario  Funcionario.cpf_f%TYPE := '130.000.000-00';
-
+  v_func_rec Funcionario%ROWTYPE;
+  v_nome Pessoa.nome%TYPE;
+  v_cpf_funcionario Funcionario.cpf_f%TYPE := '130.000.000-00';
 BEGIN
   SELECT *
   INTO v_func_rec
@@ -402,13 +402,15 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Nº de Aluguéis: ' || v_func_rec.num_alugueis);
 END;
 
--- 8. IF ELSIF --
+
+-- Comandos utilizados: DECLARE, SELECT INTO, IF, ELSIF, JOIN, DBMS_OUTPUT
+-- Objetivo: Classificar o funcionário por faixa salarial usando IF e ELSIF
 DECLARE
-  v_salario     Cargo.salario%TYPE;
-  v_nome        Pessoa.nome%TYPE;
-  v_cargo       Funcionario.cargo%TYPE;
+  v_salario Cargo.salario%TYPE;
+  v_nome Pessoa.nome%TYPE;
+  v_cargo Funcionario.cargo%TYPE;
   v_classificacao VARCHAR2(20);
-  v_cpf_func    Funcionario.cpf_f%TYPE := '140.000.000-00';
+  v_cpf_func Funcionario.cpf_f%TYPE := '140.000.000-00';
 BEGIN
   SELECT c.salario, p.nome, f.cargo
   INTO v_salario, v_nome, v_cargo
@@ -430,7 +432,9 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Classificação: ' || v_classificacao || ' (Salário: ' || TO_CHAR(v_salario, 'L9G999D99') || ').');
 END;
 
--- 9. CASE WHEN --
+
+-- Comandos utilizados: SELECT, CASE WHEN
+-- Objetivo: Classificar os produtos como "Clássico" ou "Moderno" com base na data de lançamento
 SELECT
   titulo,
   lancamento,
@@ -440,14 +444,15 @@ SELECT
   END AS Categoria_Temporal
 FROM Produto;
 
--- 10. LOOP ... EXIT WHEN --
+
+-- Comandos utilizados: DECLARE, LOOP, EXIT WHEN, SELECT INTO, CONSTANT, DBMS_OUTPUT
+-- Objetivo: Simular aluguéis enquanto houver crédito disponível, subtraindo custo fixo a cada iteração
 DECLARE
   v_num_conta       Conta.num%TYPE := 1;
   v_credito_cliente Conta.credito%TYPE;
 
   v_alugueis_feitos NUMBER := 0;
-  v_custo_aluguel   CONSTANT NUMBER := 18.50; -- Um custo fixo para o exemplo
-
+  v_custo_aluguel   CONSTANT NUMBER := 18.50;
 BEGIN
   SELECT credito
   INTO v_credito_cliente
@@ -455,26 +460,16 @@ BEGIN
   WHERE num = v_num_conta;
 
   DBMS_OUTPUT.PUT_LINE('Iniciando simulação de aluguéis para a conta ' || v_num_conta);
-  DBMS_OUTPUT.PUT_LINE('Crédito inicial: ' || TO_CHAR(v_credito_cliente, 'L999D99'));
-  DBMS_OUTPUT.PUT_LINE('Custo por aluguel: ' || TO_CHAR(v_custo_aluguel, 'L999D99'));
-  DBMS_OUTPUT.PUT_LINE('------------------------------------');
 
   LOOP
     EXIT WHEN v_credito_cliente < v_custo_aluguel;
-
     v_alugueis_feitos := v_alugueis_feitos + 1;
     v_credito_cliente := v_credito_cliente - v_custo_aluguel;
-
     DBMS_OUTPUT.PUT_LINE('Aluguel #' || v_alugueis_feitos || ' aprovado. Crédito restante: ' || TO_CHAR(v_credito_cliente, 'L999D99'));
-
   END LOOP;
 
-  DBMS_OUTPUT.PUT_LINE('------------------------------------');
-  DBMS_OUTPUT.PUT_LINE('Simulação finalizada.');
-  DBMS_OUTPUT.PUT_LINE('Crédito insuficiente para o próximo aluguel.');
-  DBMS_OUTPUT.PUT_LINE('Total de aluguéis realizados: ' || v_alugueis_feitos);
+  DBMS_OUTPUT.PUT_LINE('Simulação finalizada. Total de aluguéis realizados: ' || v_alugueis_feitos);
 END;
-
 -- 11. WHILE LOOP --
 DECLARE
   v_credito_atual Conta.credito%TYPE;
