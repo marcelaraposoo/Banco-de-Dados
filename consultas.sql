@@ -82,6 +82,81 @@ FROM Avalia A, Avalia2 B
 WHERE A.valor BETWEEN 8.5 AND 10.00
 AND B.valor BETWEEN 8.5 AND 10.00;
 
+--8. IN
+-- Mostrar os clientes que já alugaram algum produto:
+
+SELECT 
+    p.nome,
+    c.cpf_c
+FROM 
+    Cliente c
+JOIN Pessoa p ON c.cpf_c = p.cpf
+WHERE 
+    c.cpf_c IN (
+        SELECT co.cpf_cc
+        FROM Conta co
+        JOIN Aluga a ON a.num = co.num
+    );
+
+
+--9. LIKE
+-- Mostrar clientes de sobrenome Almeida que já alugaram algum produto.
+
+SELECT 
+    p.nome,
+    c.cpf_c,
+    a.id AS id_produto_alugado,
+    a.data_inicio
+FROM 
+    Pessoa p
+JOIN Cliente c ON p.cpf = c.cpf_c
+JOIN Conta co ON co.cpf_cc = c.cpf_c
+JOIN Aluga a ON a.num = co.num
+WHERE 
+    p.nome LIKE '%Almeida%'
+    AND c.cpf_c = '600.000.000-00';
+
+
+-- 10, 11, 14 e 15. INNER JOIN, COUNT, AVG, IS NOT NULL.
+-- Mostrar quantas avaliações cada cliente fez e a média das notas, considerando apenas avaliações válidas
+SELECT 
+    a.cpf_c,
+    COUNT(*) AS total_avaliacoes,
+    AVG(a.valor) AS media_avaliacoes
+FROM 
+    Cliente c
+INNER JOIN Avalia a ON c.cpf_c = a.cpf_c
+WHERE 
+    a.valor IS NOT NULL
+GROUP BY 
+    a.cpf_c;                     
+
+-- 12. MIN
+-- Mostrar todos os dependentes, junto com a menor nota que cada um deu (se tiver avaliado algo)
+SELECT 
+    d.nome,                       
+    MIN(av.valor) AS menor_nota  
+FROM 
+    Dependente d
+LEFT JOIN Avalia2 av 
+    ON d.cpf_responsavel = av.cpf_responsavel AND d.num_seq = av.num_seq
+GROUP BY 
+    d.nome;
+
+
+-- 13. MAX
+-- Mostrar as notas máximas de todos os produtos mas mostrar também produtos que não foram avaliados.
+
+SELECT 
+    p.titulo,                   
+    MAX(a.valor) AS nota_maxima 
+FROM 
+    Avalia a
+RIGHT JOIN Produto p ON a.id = p.id
+GROUP BY 
+    p.titulo;
+
+
 -- 16. LEFT ou RIGHT ou FULL OUTER JOIN: todo os clientes e os quais ganharam bônus
 SELECT P.nome, id_bonus
 FROM Pessoa P
