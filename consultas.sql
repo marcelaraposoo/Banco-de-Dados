@@ -470,27 +470,28 @@ BEGIN
 
   DBMS_OUTPUT.PUT_LINE('Simulação finalizada. Total de aluguéis realizados: ' || v_alugueis_feitos);
 END;
--- 11. WHILE LOOP --
+-- Comandos utilizados: WHILE LOOP, SELECT INTO, DBMS_OUTPUT
+-- Objetivo: Incrementar crédito de uma conta até atingir um valor alvo
 DECLARE
   v_credito_atual Conta.credito%TYPE;
   v_credito_alvo  NUMBER := 200;
-  v_num_conta     Conta.num%TYPE := 2; -- Conta que existe no Povoamento
+  v_num_conta     Conta.num%TYPE := 2;
 BEGIN
   SELECT credito INTO v_credito_atual
   FROM Conta
   WHERE num = v_num_conta; 
 
-  DBMS_OUTPUT.PUT_LINE('Crédito inicial na conta ' || v_num_conta || ': ' || v_credito_atual);
-
   WHILE v_credito_atual < v_credito_alvo LOOP
-    v_credito_atual := v_credito_atual + 10; -- Adiciona 10 de crédito
-    DBMS_OUTPUT.PUT_LINE(' +10... Crédito atual: ' || v_credito_atual);
+    v_credito_atual := v_credito_atual + 10;
+    DBMS_OUTPUT.PUT_LINE('+10... Crédito atual: ' || v_credito_atual);
   END LOOP;
 
   DBMS_OUTPUT.PUT_LINE('Crédito alvo atingido. Crédito final: ' || v_credito_atual);
 END;
 
--- 12. FOR IN LOOP --
+
+-- Comandos utilizados: FOR LOOP, SELECT INTO, DBMS_OUTPUT
+-- Objetivo: Listar os dependentes de um determinado responsável
 DECLARE
   v_cpf_resp Dependente.cpf_responsavel%TYPE := '700.000.000-00';
   v_nome_resp  Pessoa.nome%TYPE;
@@ -506,9 +507,9 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('--- Fim da Lista ---');
 END;
 
--- 13. SELECT … INTO está junto com o 7. %ROWTYPE --
 
--- 14. CURSOR (OPEN, FETCH e CLOSE)
+-- Comandos utilizados: CURSOR, OPEN, FETCH, CLOSE, EXCEPTION
+-- Objetivo: Listar produtos com estoque igual ou inferior a 5 usando cursor explícito
 DECLARE
   CURSOR c_produtos_baixo_estoque IS
     SELECT titulo, estoque
@@ -517,10 +518,9 @@ DECLARE
 
   v_titulo  Produto.titulo%TYPE;
   v_estoque Produto.estoque%TYPE;
-
 BEGIN
   DBMS_OUTPUT.PUT_LINE('Relatório de Produtos com Baixo Estoque:');
-  
+
   OPEN c_produtos_baixo_estoque;
   LOOP
     FETCH c_produtos_baixo_estoque INTO v_titulo, v_estoque;
@@ -528,7 +528,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('-> Produto: "' || v_titulo || '" | Estoque: ' || v_estoque);
   END LOOP;
   CLOSE c_produtos_baixo_estoque;
-  
+
 EXCEPTION
   WHEN OTHERS THEN
     DBMS_OUTPUT.PUT_LINE('Ocorreu um erro no teste do cursor: ' || SQLERRM);
@@ -537,7 +537,9 @@ EXCEPTION
     END IF;
 END;
 
--- 15. EXCEPTION WHEN
+
+-- Comandos utilizados: EXCEPTION, INSERT, ROLLBACK
+-- Objetivo: Testar o tratamento da exceção DUP_VAL_ON_INDEX ao tentar inserir CPF duplicado
 DECLARE
   v_cpf_teste Pessoa.cpf%TYPE := '100.000.000-00';
 BEGIN
@@ -558,6 +560,33 @@ EXCEPTION
     ROLLBACK;
 END;
 /
+
+
+-- Comandos utilizados: PROCEDURE, IN, OUT, SELECT INTO, JOIN, EXCEPTION
+-- Objetivo: Criar procedure que retorna nome e cidade de um cliente dado o CPF
+CREATE OR REPLACE PROCEDURE obter_dados_cliente (
+  p_cpf_cliente    IN  Pessoa.cpf%TYPE,
+  p_nome_cliente   OUT Pessoa.nome%TYPE,
+  p_cidade_cliente OUT Endereco.cidade%TYPE
+) IS
+BEGIN
+  SELECT p.nome, e.cidade
+  INTO   p_nome_cliente, p_cidade_cliente
+  FROM   Pessoa p
+  JOIN   Endereco e ON p.cep = e.cep AND p.num_endereco = e.num_endereco
+  WHERE  p.cpf = p_cpf_cliente;
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    p_nome_cliente := 'Cliente não encontrado para o CPF informado.';
+    p_cidade_cliente := NULL;
+  WHEN OTHERS THEN
+    p_nome_cliente := 'Ocorreu um erro na consulta.';
+    p_cidade_cliente := NULL;
+END obter_dados_cliente;
+/
+
+
 
 -- 16. USO DE PARÂMETROS (IN, OUT)
 CREATE OR REPLACE PROCEDURE obter_dados_cliente (
