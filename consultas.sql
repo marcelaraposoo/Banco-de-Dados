@@ -54,28 +54,34 @@
 -- ==========================
 
 
--- 1. ALTER TABLE: alterar a existência da coluna "complemento"
+-- Comandos utilizados: ALTER TABLE
+-- Objetivo: Remover a coluna "complemento" da tabela Endereco
 ALTER TABLE Endereco
 DROP COLUMN Complemento;
 
--- 2. CREATE INDEX: criar índice para um produto com uma junção única para facilitar consultas
+-- Comandos utilizados: CREATE INDEX
+-- Objetivo: Criar um índice sobre título, tamanho e lançamento dos produtos para otimizar consultas
 CREATE INDEX prod_unico
 ON Produto (titulo, tamanho, lancamento);
 
--- 3. INSERT INTO: adicionando dependente novo
+-- Comandos utilizados: INSERT INTO
+-- Objetivo: Inserir um novo cliente na tabela Cliente sem um indicador
 INSERT INTO Cliente (cpf_c, cpf_indicador)
 VALUES ('110.000.000-00', NULL);
 
--- 4. UPDATE: update do salário do crago supervisor
+-- Comandos utilizados: UPDATE
+-- Objetivo: Atualizar o salário do cargo "Supervisor" para 5000
 UPDATE Cargo
 SET salario = 5000
 WHERE titulo = 'Supervisor';
 
--- 5. DELETE: deletar bônus que já foi utilizado
+-- Comandos utilizados: DELETE
+-- Objetivo: Deletar um registro de bônus utilizado da tabela Ganha
 DELETE FROM Ganha
 WHERE num_conta = 2 AND id_bonus = 2;
 
--- 6. SELECT-FROM-WHERE: selecionar data de nascimento de clientes
+-- Comandos utilizados: SELECT e FROM e WHERE
+-- Objetivo: Selecionar a data de nascimento de todas as pessoas que são clientes
 SELECT nascimento
 FROM Pessoa
 WHERE cpf IN (
@@ -83,9 +89,10 @@ WHERE cpf IN (
     FROM Cliente
 );
 
--- 7. BETWEEN: criar tabela que retorna todas as melhores avaliações entre 8.5 e 10
+-- Comandos utilizados: CREATE VIEW, SELECT e WHERE com BETWEEN
+-- Objetivo: Criar uma view que exibe IDs de avaliações entre 8.5 e 10, feitas por clientes e dependentes
 CREATE VIEW avaliacoes AS
-SELECT A.id AS id_avalia, B.id id_avalia2
+SELECT A.id AS id_avalia, B.id AS id_avalia2
 FROM Avalia A, Avalia2 B
 WHERE A.valor BETWEEN 8.5 AND 10.00
 AND B.valor BETWEEN 8.5 AND 10.00;
