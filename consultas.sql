@@ -588,10 +588,11 @@ END obter_dados_cliente;
 
 
 
--- 16. USO DE PARÂMETROS (IN, OUT)
+-- Comandos utilizados: PROCEDURE, IN, OUT, SELECT INTO, JOIN, EXCEPTION
+-- Objetivo: Criar procedure que retorna nome e cidade de um cliente dado o CPF
 CREATE OR REPLACE PROCEDURE obter_dados_cliente (
-  p_cpf_cliente   IN  Pessoa.cpf%TYPE,
-  p_nome_cliente  OUT Pessoa.nome%TYPE,
+  p_cpf_cliente    IN  Pessoa.cpf%TYPE,
+  p_nome_cliente   OUT Pessoa.nome%TYPE,
   p_cidade_cliente OUT Endereco.cidade%TYPE
 ) IS
 BEGIN
@@ -611,22 +612,26 @@ EXCEPTION
 END obter_dados_cliente;
 /
 
--- Bloco de teste para a procedure
+
+-- Comandos utilizados: DECLARE, CALL PROCEDURE, DBMS_OUTPUT
+-- Objetivo: Testar a procedure que retorna nome e cidade de um cliente a partir do CPF
 DECLARE
   v_nome   Pessoa.nome%TYPE;
   v_cidade Endereco.cidade%TYPE;
   v_cpf_teste Pessoa.cpf%TYPE := '200.000.000-00';
 BEGIN
   DBMS_OUTPUT.PUT_LINE('Chamando procedure para o CPF: ' || v_cpf_teste);
-  
+
   obter_dados_cliente(v_cpf_teste, v_nome, v_cidade);
-  
+
   DBMS_OUTPUT.PUT_LINE('-> Nome retornado: ' || v_nome);
   DBMS_OUTPUT.PUT_LINE('-> Cidade retornada: ' || v_cidade);
 END;
 /
 
--- 17. CREATE OR REPLACE PACKAGE (SPECIFICATION)
+
+-- Comandos utilizados: CREATE OR REPLACE PACKAGE
+-- Objetivo: Declarar a especificação do pacote pkg_gerenciamento_locadora, contendo procedimentos e funções para registrar aluguéis e calcular multas.
 CREATE OR REPLACE PACKAGE pkg_gerenciamento_locadora AS
   PROCEDURE registrar_aluguel (
     p_cpf_funcionario IN Funcionario.cpf_f%TYPE,
@@ -643,7 +648,9 @@ CREATE OR REPLACE PACKAGE pkg_gerenciamento_locadora AS
 END pkg_gerenciamento_locadora;
 /
 
--- 18. CREATE OR REPLACE PACKAGE BODY
+-- Comandos utilizados: CREATE OR REPLACE PACKAGE BODY
+-- Objetivo: Implementar a lógica dos procedimentos e funções declarados no pacote pkg_gerenciamento_locadora.
+
 CREATE OR REPLACE PACKAGE BODY pkg_gerenciamento_locadora AS
   PROCEDURE registrar_aluguel (
     p_cpf_funcionario IN Funcionario.cpf_f%TYPE,
@@ -704,7 +711,10 @@ CREATE OR REPLACE PACKAGE BODY pkg_gerenciamento_locadora AS
 END pkg_gerenciamento_locadora;
 /
 
--- 19. CREATE OR REPLACE TRIGGER (COMANDO)
+
+-- Comandos utilizados: CREATE OR REPLACE TRIGGER (comando DDL)
+-- Objetivo: Impedir qualquer modificação direta (INSERT, UPDATE ou DELETE) na tabela CARGO, por ser considerada crítica.
+
 CREATE OR REPLACE TRIGGER trg_protege_cargo
 BEFORE INSERT OR UPDATE OR DELETE ON Cargo
 BEGIN
@@ -712,7 +722,10 @@ BEGIN
 END;
 /
 
--- 20. CREATE OR REPLACE TRIGGER (LINHA)
+
+-- Comandos utilizados: CREATE OR REPLACE TRIGGER (linha)
+-- Objetivo: Atualizar automaticamente os contadores de estoque, quantidade alugada e número de aluguéis após a inserção de um novo aluguel.
+
 CREATE OR REPLACE TRIGGER trg_atualiza_aluguel
 AFTER INSERT ON Aluga
 FOR EACH ROW
