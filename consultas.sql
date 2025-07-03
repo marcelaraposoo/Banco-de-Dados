@@ -97,9 +97,8 @@ FROM Avalia A, Avalia2 B
 WHERE A.valor BETWEEN 8.5 AND 10.00
 AND B.valor BETWEEN 8.5 AND 10.00;
 
---8. IN
--- Mostrar os clientes que já alugaram algum produto:
-
+-- Comandos utilizados: SELECT, FROM, IN
+-- Objetivo: Listar os nomes e CPFs dos clientes que já alugaram algum produto
 SELECT 
     p.nome,
     c.cpf_c
@@ -113,10 +112,8 @@ WHERE
         JOIN Aluga a ON a.num = co.num
     );
 
-
---9. LIKE
--- Mostrar clientes de sobrenome Almeida que já alugaram algum produto.
-
+-- Comandos utilizados: SELECT, FROM, JOIN, LIKE
+-- Objetivo: Exibir os clientes com sobrenome "Almeida" que já alugaram algum produto
 SELECT 
     p.nome,
     c.cpf_c,
@@ -131,9 +128,8 @@ WHERE
     p.nome LIKE '%Almeida%'
     AND c.cpf_c = '600.000.000-00';
 
-
--- 10, 11, 14 e 15. INNER JOIN, COUNT, AVG, IS NOT NULL.
--- Mostrar quantas avaliações cada cliente fez e a média das notas, considerando apenas avaliações válidas
+-- Comandos utilizados: INNER JOIN, COUNT, AVG, IS NOT NULL, GROUP BY
+-- Objetivo: Mostrar quantas avaliações cada cliente fez e a média das notas, considerando apenas avaliações válidas
 SELECT 
     a.cpf_c,
     COUNT(*) AS total_avaliacoes,
@@ -144,12 +140,12 @@ INNER JOIN Avalia a ON c.cpf_c = a.cpf_c
 WHERE 
     a.valor IS NOT NULL
 GROUP BY 
-    a.cpf_c;                     
+    a.cpf_c;
 
--- 12. MIN
--- Mostrar todos os dependentes, junto com a menor nota que cada um deu (se tiver avaliado algo)
+-- Comandos utilizados: SELECT, LEFT JOIN, MIN, GROUP BY
+-- Objetivo: Exibir o nome dos dependentes e a menor nota dada por cada um, caso tenham avaliado algum produto
 SELECT 
-    d.nome,                       
+    d.nome,
     MIN(av.valor) AS menor_nota  
 FROM 
     Dependente d
@@ -158,12 +154,10 @@ LEFT JOIN Avalia2 av
 GROUP BY 
     d.nome;
 
-
--- 13. MAX
--- Mostrar as notas máximas de todos os produtos mas mostrar também produtos que não foram avaliados.
-
+-- Comandos utilizados: SELECT, RIGHT JOIN, MAX, GROUP BY
+-- Objetivo: Exibir todos os produtos junto com a nota máxima recebida, incluindo produtos não avaliados
 SELECT 
-    p.titulo,                   
+    p.titulo,
     MAX(a.valor) AS nota_maxima 
 FROM 
     Avalia a
@@ -171,13 +165,14 @@ RIGHT JOIN Produto p ON a.id = p.id
 GROUP BY 
     p.titulo;
 
-
--- 16. LEFT ou RIGHT ou FULL OUTER JOIN: todo os clientes e os quais ganharam bônus
+-- Comandos utilizados: LEFT JOIN, RIGHT JOIN
+-- Objetivo: Listar todos os clientes com seus respectivos bônus, se houver
 SELECT P.nome, id_bonus
 FROM Pessoa P
-RIGHT JOIN Cliente C ON P.cpf=C.cpf_c
-JOIN Conta ON C.cpf_c=Conta.cpf_cc
-LEFT JOIN GANHA G ON Conta.num=G.num_conta;
+RIGHT JOIN Cliente C ON P.cpf = C.cpf_c
+JOIN Conta ON C.cpf_c = Conta.cpf_cc
+LEFT JOIN GANHA G ON Conta.num = G.num_conta;
+
 
 -- 18. e 17. SUBCONSULTA COM IN e SUBCONSULTA COM OPERADOR RELACIONAL: mandar email pros cliente que moram perto da locadora, avisando de uma noite de filme na frente da locadora
 SELECT E.email
