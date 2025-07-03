@@ -174,57 +174,70 @@ JOIN Conta ON C.cpf_c = Conta.cpf_cc
 LEFT JOIN GANHA G ON Conta.num = G.num_conta;
 
 
--- 18. e 17. SUBCONSULTA COM IN e SUBCONSULTA COM OPERADOR RELACIONAL: mandar email pros cliente que moram perto da locadora, avisando de uma noite de filme na frente da locadora
+-- Comandos utilizados: SELECT, FROM, SUBCONSULTA COM IN, SUBCONSULTA COM OPERADOR RELACIONAL, JOIN
+-- Objetivo: Selecionar os e-mails de clientes maiores de idade que moram nos bairros próximos à locadora
 SELECT E.email
 FROM Email E
-WHERE E.cpf_e IN (SELECT C.cpf_c
-                FROM  Cliente C
-                JOIN Pessoa P ON C.cpf_c=P.cpf
-                JOIN Endereco EN ON P.cep=EN.cep AND P.num_endereco=EN.num_endereco
-                WHERE EN.bairro IN ('Várzea', 'CDU', 'Brasilit') AND (SYSDATE - P.nascimento) >= (18 * 365));
+WHERE E.cpf_e IN (
+    SELECT C.cpf_c
+    FROM Cliente C
+    JOIN Pessoa P ON C.cpf_c = P.cpf
+    JOIN Endereco EN ON P.cep = EN.cep AND P.num_endereco = EN.num_endereco
+    WHERE EN.bairro IN ('Várzea', 'CDU', 'Brasilit') AND (SYSDATE - P.nascimento) >= (18 * 365)
+);
 
--- 19. SUBCONSULTA COM ANY: avaliacões dos produtos (feita pelos clientes)(tirando a pior das avaliaçoes)
+-- Comandos utilizados: SELECT, JOIN, SUBCONSULTA COM ANY
+-- Objetivo: Exibir as avaliações de produtos feitas por clientes, exceto a pior avaliação de cada produto
 SELECT P.titulo, AV.valor
-from Avalia  AV
-JOIN Produto P on AV.id=P.id
-WHERE AV.valor > ANY (SELECT AV2.valor
-                    FROM Avalia AV2
-                    WHERE AV2.id = AV.id);
+FROM Avalia AV
+JOIN Produto P ON AV.id = P.id
+WHERE AV.valor > ANY (
+    SELECT AV2.valor
+    FROM Avalia AV2
+    WHERE AV2.id = AV.id
+);
 
--- 20. SUBCONSULTA COM ALL: funcionario que mais vendoeu
+-- Comandos utilizados: SELECT, JOIN, SUBCONSULTA COM ALL
+-- Objetivo: Mostrar o funcionário que realizou mais aluguéis que todos os outros
 SELECT P.nome, F.num_alugueis
 FROM Pessoa P
-JOIN Funcionario F ON P.cpf=F.cpf_f
-WHERE F.num_alugueis>= ALL(SELECT F2.num_alugueis
-                        FROM Funcionario F2
-                        WHERE F2.cpf_f != F.cpf_f);
+JOIN Funcionario F ON P.cpf = F.cpf_f
+WHERE F.num_alugueis >= ALL (
+    SELECT F2.num_alugueis
+    FROM Funcionario F2
+    WHERE F2.cpf_f != F.cpf_f
+);
 
-
--- 21. ORDER BY: pecas alugadas dos produtos
+-- Comandos utilizados: SELECT, ORDER BY
+-- Objetivo: Listar os produtos com a quantidade de peças alugadas, ordenando por quantidade (descendente) e título (ascendente)
 SELECT P.qnt_alugada, P.titulo
 FROM Produto P
 ORDER BY P.qnt_alugada DESC, P.titulo ASC;
 
--- 22. GROUP BY: número de venda dos funcionário agrupados por homem  mulher
-SELECT  P.genero, SUM(F.num_alugueis)  
-from Pessoa P
-JOIN Funcionario F ON P.cpf=F.cpf_f
+-- Comandos utilizados: SELECT, JOIN, GROUP BY
+-- Objetivo: Exibir o total de aluguéis realizados, agrupados por gênero dos funcionários (exceto supervisores)
+SELECT P.genero, SUM(F.num_alugueis)
+FROM Pessoa P
+JOIN Funcionario F ON P.cpf = F.cpf_f
 WHERE F.cargo != 'Supervisor'
 GROUP BY P.genero;
 
--- 23. HAVING: produtos having  media da avaliacao  maior que 7
+-- Comandos utilizados: SELECT, JOIN, GROUP BY, HAVING, AVG
+-- Objetivo: Mostrar os produtos cuja média das avaliações seja maior que 7
 SELECT P.titulo, AVG(AV.valor) AS Média_avaliação
-FROM Avalia AV 
-JOIN Produto P ON AV.id=P.id
-GROUP  BY P.titulo
-HAVING AVG(AV.valor)>7;
+FROM Avalia AV
+JOIN Produto P ON AV.id = P.id
+GROUP BY P.titulo
+HAVING AVG(AV.valor) > 7;
 
--- 24. UNION ou INTERSECT ou MINUS: lista de cpfs que são clientes e funcionários ao mesmo tempo
+-- Comandos utilizados: INTERSECT
+-- Objetivo: Listar os CPFs que pertencem a pessoas que são clientes e funcionários ao mesmo tempo
 SELECT cpf_c FROM Cliente
 INTERSECT
 SELECT cpf_f FROM Funcionario;
 
--- 25. CREATE VIEW: retorna tabela com o nome dos clientes e o seu bonus
+-- Comandos utilizados: CREATE VIEW, SELECT, JOIN
+-- Objetivo: Criar uma visão com o nome dos clientes e o valor do bônus que cada um recebeu
 CREATE VIEW vw_clientes_com_bonus AS
 SELECT P.nome, B.valor
 FROM Pessoa P 
@@ -232,7 +245,8 @@ JOIN Conta C ON P.cpf = C.cpf_cc
 JOIN Ganha G ON G.num_conta = C.num
 JOIN Bonus B ON B.id_bonus = G.id_bonus;
 
--- 26. GRANT / REVOKE: 
+-- Comandos utilizados: GRANT, REVOKE
+-- Objetivo: Conceder e depois revogar permissão de SELECT sobre a tabela Funcionario para a view criada
 GRANT SELECT ON Funcionario TO vw_clientes_com_bonus;
 REVOKE SELECT ON Funcionario FROM vw_clientes_com_bonus;
 
@@ -241,6 +255,8 @@ REVOKE SELECT ON Funcionario FROM vw_clientes_com_bonus;
 -- ==========================
 -- ---------- PL -----------
 -- ==========================
+
+
 
 -- 1. USO DE RECORD: Mostrar os dados (nome, cargo e números de aluguéis) de um funcionário específico.
 DECLARE
